@@ -7,6 +7,6 @@
             fx:controller="fr.polytech.projet.controller.PromptResultViewController">
    <children>
       <Group fx:id="group"/>
-      <Label fx:id="lbl_distance" text="Label"/>
+      <Label fx:id="lblDistance" text="Label"/>
    </children>
 </AnchorPane>
