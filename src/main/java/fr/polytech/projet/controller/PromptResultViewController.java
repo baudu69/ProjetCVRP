@@ -34,13 +34,22 @@ public class PromptResultViewController {
         this.fichier = fichier;
     }
 
+    /**
+     * Charge la liste des points, les dessine puis genère les chemins initiaux
+     */
     public void chargerPoints() {
         Lecture lecture = new Lecture();
         this.points = lecture.lireFichier(this.fichier);
         points.forEach(this::dessinerPoint);
-        genererCheminAleatoire(points);
+        genererCheminAleatoire();
     }
 
+    /**
+     * Dessine un point sur le graphique
+     * Si le point est un entrepot, il sera en rouge
+     *
+     * @param point Point à dessiner
+     */
     private void dessinerPoint(Point point) {
         Circle circle = new Circle();
         circle.setCenterX(point.getX() * coefMulti);
@@ -51,6 +60,11 @@ public class PromptResultViewController {
         this.group.getChildren().add(circle);
     }
 
+    /**
+     * Dessine un chemin sur le graphique
+     *
+     * @param chemin chemin à dessiner
+     */
     private void dessinerChemin(Chemin chemin) {
         Line line = new Line();
         line.setStartX(chemin.getDebut().getX() * coefMulti);
@@ -60,7 +74,11 @@ public class PromptResultViewController {
         this.group.getChildren().add(line);
     }
 
-    private void genererCheminAleatoire(List<Point> points) {
+    /**
+     * Genère les chemins initiaux entre les points
+     * Chaque point est relié au suivant présent dans la liste
+     */
+    private void genererCheminAleatoire() {
         this.chemins = new ArrayList<>();
         final Double[] distanceTotale = {0.0};
         IntStream.range(0, points.size() - 1).forEach(i -> {

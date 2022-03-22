@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 public class Lecture {
     private static final String chemin = "src/main/resources/fr/polytech/projet/donnees/";
+
     private final Function<String, Point> mapToItem = (line) -> {
         String[] p = line.split(";");
         int id = Integer.parseInt(p[0]);
@@ -24,6 +25,13 @@ public class Lecture {
         return new Point(x, y, id, q);
     };
 
+    /**
+     * Renvoie la liste des points d'un fichier
+     * Le point avec l'ID 0 est un objet de type Entrepot
+     *
+     * @param fichier fichier voulu
+     * @return Liste de points avec un entrepot
+     */
     public List<Point> lireFichier(File fichier) {
         List<Point> inputList = new ArrayList<>();
         try {
@@ -38,16 +46,33 @@ public class Lecture {
         return inputList;
     }
 
+    /**
+     * Renvoie la liste des points d'un fichier
+     * Le point avec l'ID 0 est un objet de type Entrepot
+     *
+     * @param nomFicher nom du fichier voulu
+     * @return Liste de points avec un entrepot
+     */
     public List<Point> lireFichier(String nomFicher) {
         File file = new File(chemin + nomFicher);
         return lireFichier(file);
     }
 
+    /**
+     * Liste les fichiers de données présent dans le dossier ressource
+     *
+     * @return Tableau de Fichier
+     */
     public File[] listerLesFichiers() {
         File file = new File(chemin);
         return file.listFiles();
     }
 
+    /**
+     * Liste les noms des fichiers de données présent dans le dossier ressource
+     *
+     * @return Tableau de noms de fichiers
+     */
     public List<String> listerLesFichiersStr() {
         return Arrays.stream(this.listerLesFichiers()).map(File::getName).toList();
     }

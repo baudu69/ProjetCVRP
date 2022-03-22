@@ -20,7 +20,6 @@ public class HelloController {
 
     @FXML
     protected void btnValiderOnClick(ActionEvent event) throws Exception {
-        this.btnValiderChoix.setText("Appuyé");
         promptResultApplication.start((Stage) btnValiderChoix.getScene().getWindow(), choixJeuDonnees.getValue());
     }
 
