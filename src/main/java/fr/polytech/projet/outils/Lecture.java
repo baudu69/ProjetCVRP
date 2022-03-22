@@ -12,7 +12,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Lecture {
-    private static String chemin = "src/main/resources/fr/polytech/projet/donnees/";
+    private static final String chemin = "src/main/resources/fr/polytech/projet/donnees/";
     private final Function<String, Point> mapToItem = (line) -> {
         String[] p = line.split(";");
         int id = Integer.parseInt(p[0]);

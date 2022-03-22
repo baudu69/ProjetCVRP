@@ -28,4 +28,9 @@ public class Chemin {
         this.fin = fin;
         fin.setArrive(this);
     }
+
+    public Double getDistance() {
+        return Math.sqrt((fin.getX() - debut.getX()) * (fin.getX() - debut.getX()) + (fin.getY() - debut.getY()) * (fin.getY() - debut.getY()));
+    }
+
 }
