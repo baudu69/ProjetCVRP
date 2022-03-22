@@ -35,7 +35,7 @@ public class PromptResultViewController {
 
     public void chargerPoints() {
         Lecture lecture = new Lecture();
-        List<Point> points = lecture.lireFichier(this.fichier);
+        this.points = lecture.lireFichier(this.fichier);
         points.forEach(this::dessinerPoint);
         genererCheminAleatoire(points);
     }
@@ -60,7 +60,7 @@ public class PromptResultViewController {
     }
 
     private void genererCheminAleatoire(List<Point> points) {
-        List<Chemin> chemins = new ArrayList<>();
+        this.chemins = new ArrayList<>();
         for (int i = 0; i < points.size() - 1; i++) {
             chemins.add(new Chemin(points.get(i), points.get(i + 1)));
         }
