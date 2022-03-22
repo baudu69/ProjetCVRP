@@ -13,6 +13,7 @@ import javafx.scene.shape.Line;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class PromptResultViewController {
 
@@ -61,15 +62,14 @@ public class PromptResultViewController {
 
     private void genererCheminAleatoire(List<Point> points) {
         this.chemins = new ArrayList<>();
-        for (int i = 0; i < points.size() - 1; i++) {
-            chemins.add(new Chemin(points.get(i), points.get(i + 1)));
-        }
+        final Double[] distanceTotale = {0.0};
+        IntStream.range(0, points.size() - 1).forEach(i -> {
+            Chemin chemin = new Chemin(points.get(i), points.get(i + 1));
+            chemins.add(chemin);
+            distanceTotale[0] += chemin.getDistance();
+        });
         chemins.add(new Chemin(points.get(points.size() - 1), points.get(0)));
         chemins.forEach(this::dessinerChemin);
-        Double distanceTotale = 0.0;
-        for (Chemin chemin : chemins) {
-            distanceTotale += chemin.getDistance();
-        }
-        this.lblDistance.setText("Distance totale : " + distanceTotale);
+        this.lblDistance.setText("Distance totale : " + distanceTotale[0]);
     }
 }
