@@ -17,7 +17,7 @@ import java.util.stream.IntStream;
 
 public class PromptResultViewController {
 
-    private final int coefMulti = 8;
+    public static final int coefMulti = 8;
 
     @FXML
     protected Group group;
@@ -67,10 +67,8 @@ public class PromptResultViewController {
      */
     private void dessinerChemin(Chemin chemin) {
         Line line = new Line();
-        line.setStartX(chemin.getDebut().getX() * coefMulti);
-        line.setStartY(chemin.getDebut().getY() * coefMulti);
-        line.setEndX(chemin.getFin().getX() * coefMulti);
-        line.setEndY(chemin.getFin().getY() * coefMulti);
+        chemin.setLine(line);
+        chemin.updateAffichage();
         this.group.getChildren().add(line);
     }
 
