@@ -1,8 +1,12 @@
 package fr.polytech.projet.model;
 
+import javafx.scene.paint.Paint;
+
 import java.util.ArrayList;
 
 public class Chemin extends ArrayList<Point> {
+
+    private final Paint couleur = ChoixCouleur.instance.getRandomColor();
 
     public int distance() {
         for (Point p : this) {
