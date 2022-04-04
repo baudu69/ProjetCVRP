@@ -22,6 +22,10 @@ public class Chemin extends ArrayList<Point> {
                 .sum();
     }
 
+    public Paint getCouleur() {
+        return couleur;
+    }
+
     /**
      * Renvoi le nombre de camions minimums necessaires pour tout transporter
      *
