@@ -1,6 +1,7 @@
 package fr.polytech.projet.model;
 
 import javafx.scene.paint.Paint;
+
 import java.util.*;
 
 public class Chemin implements List<Point> {
@@ -8,12 +9,12 @@ public class Chemin implements List<Point> {
 	private final List<Point> points = new ArrayList<>();
 	private boolean changed = false;
 
-	private final Paint couleur = ChoixCouleur.instance.getRandomColor();
+	private final Paint couleur = ChoixCouleur.getRandomColor();
 
-	/**
-	 * Renvoie la longueur totale du chemin
-	 */
-	public double longueur() {
+	private Double cacheLongueur = null;
+	private Integer cacheQuantity = null;
+
+	private void updateCacheLongueur() {
 		double ret = 0;
 
 		Point prev = null;
@@ -23,37 +24,57 @@ public class Chemin implements List<Point> {
 			prev = p;
 		}
 
-		return ret;
+		cacheLongueur = ret;
+	}
+
+	private void updateCacheQuantity() {
+		cacheQuantity = points.stream()
+				.mapToInt(Point::q)
+				.sum();
+	}
+
+	private void updateCache() {
+		updateCacheLongueur();
+		updateCacheQuantity();
+
+		changed = false;
 	}
 
 	/**
-	 * Renvoie le poids total des colis transportés
+	 * @return la longueur totale du chemin
+	 */
+	public double longueur() {
+		if (changed || cacheLongueur == null) updateCache();
+		return cacheLongueur;
+	}
+
+	/**
+	 * @return le poids total des colis transportés
 	 */
 	public int quantity() {
-		return points.stream()
-				.mapToInt(Point::q)
-				.sum();
+		if (changed || cacheQuantity == null) updateCache();
+		return cacheQuantity;
 	}
 
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		
+
 		if (o == null || getClass() != o.getClass()) return false;
-		
+
 		Chemin that = (Chemin) o;
-		
+
 		return Objects.equals(points, that.points);
 	}
 	@Override
 	public int hashCode() {
 		return Objects.hash(points);
 	}
-	
-	
-	
-	
+
+
+	// region Implémentation List<Point>
+
 	@Override
 	public Point get(int index) {
 		return points.get(index);
@@ -93,7 +114,6 @@ public class Chemin implements List<Point> {
 	public List<Point> subList(int fromIndex, int toIndex) {
 		return points.subList(fromIndex, toIndex);
 	}
-
 	@Override
 	public int size() {
 		return points.size();
@@ -158,17 +178,19 @@ public class Chemin implements List<Point> {
 		points.clear();
 	}
 
-    public Paint getCouleur() {
-        return couleur;
-    }
+	// endregion
 
-    /**
-     * Renvoi le nombre de camions minimums necessaires pour tout transporter
-     *
-     * @param C Poids maximum que peut prendre un camion
-     * @return nombre de camions
-     */
-    public int nbCamionMinimum(int C) {
-        return this.quantity() % C == 0 ? this.quantity() / C : this.quantity() / C + 1;
-    }
+	public Paint getCouleur() {
+		return couleur;
+	}
+
+	/**
+	 * Renvoi le nombre de camions minimums necessaires pour tout transporter
+	 *
+	 * @param C Poids maximum que peut prendre un camion
+	 * @return nombre de camions
+	 */
+	public int nbCamionMinimum(int C) {
+		return this.quantity() % C == 0 ? this.quantity() / C : this.quantity() / C + 1;
+	}
 }

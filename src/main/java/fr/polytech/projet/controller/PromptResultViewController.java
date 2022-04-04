@@ -106,6 +106,7 @@ public class PromptResultViewController {
             line.setEndY(chemin.get(i + 1).y() * coefMulti);
             line.setFill(chemin.getCouleur());
             line.setStroke(chemin.getCouleur());
+            line.setStrokeWidth(3);
             this.group.getChildren().add(line);
         }
         Line line = new Line();
