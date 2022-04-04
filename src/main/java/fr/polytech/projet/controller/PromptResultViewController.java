@@ -3,6 +3,7 @@ package fr.polytech.projet.controller;
 import fr.polytech.projet.model.Chemin;
 import fr.polytech.projet.model.Point;
 import fr.polytech.projet.outils.Lecture;
+import fr.polytech.projet.outils.OutilsGraphe;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -38,7 +39,7 @@ public class PromptResultViewController {
      */
     public void chargerPoints() {
         Lecture lecture = new Lecture();
-        chemin = lecture.lireFichier(this.fichier);
+        chemin = OutilsGraphe.genererSolutionAleatoire(lecture.lireFichier(this.fichier));
         this.dessinerChemin(chemin);
         chemin.forEach(this::dessinerPoint);
 

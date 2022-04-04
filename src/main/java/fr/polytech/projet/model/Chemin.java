@@ -154,4 +154,14 @@ public class Chemin implements List<Point> {
 		changed = true;
 		points.clear();
 	}
+
+	/**
+     * Renvoi le nombre de camions minimums necessaires pour tout transporter
+     *
+     * @param C Poids maximum que peut prendre un camion
+     * @return nombre de camions
+     */
+    public int nbCamionMinimum(int C) {
+        return this.quantity() % C == 0 ? this.quantity() / C : this.quantity() / C + 1;
+    }
 }
