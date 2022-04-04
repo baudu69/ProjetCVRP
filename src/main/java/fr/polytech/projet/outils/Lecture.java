@@ -1,15 +1,13 @@
 package fr.polytech.projet.outils;
 
 
-import fr.polytech.projet.model.Entrepot;
+import fr.polytech.projet.model.Chemin;
 import fr.polytech.projet.model.Point;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class Lecture {
     private static final String chemin = "src/main/resources/fr/polytech/projet/donnees/";
@@ -20,7 +18,6 @@ public class Lecture {
         int x = Integer.parseInt(p[1]);
         int y = Integer.parseInt(p[2]);
         int q = Integer.parseInt(p[3]);
-        if (id == 0) return new Entrepot(x, y, id, q);
 
         return new Point(x, y, id, q);
     };
@@ -32,13 +29,12 @@ public class Lecture {
      * @param fichier fichier voulu
      * @return Liste de points avec un entrepot
      */
-    public List<Point> lireFichier(File fichier) {
-        List<Point> inputList = new ArrayList<>();
-        try {
-            InputStream inputFS = new FileInputStream(fichier);
-            BufferedReader br = new BufferedReader(new InputStreamReader(inputFS));
-            inputList = br.lines().skip(1).map(mapToItem).collect(Collectors.toList());
-            br.close();
+    public Chemin lireFichier(File fichier) {
+        Chemin inputList = new Chemin();
+        try (InputStream inputFS = new FileInputStream(fichier);
+             BufferedReader br = new BufferedReader(new InputStreamReader(inputFS))
+        ) {
+            inputList.addAll(br.lines().skip(1).map(mapToItem).toList());
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -53,7 +49,7 @@ public class Lecture {
      * @param nomFicher nom du fichier voulu
      * @return Liste de points avec un entrepot
      */
-    public List<Point> lireFichier(String nomFicher) {
+    public Chemin lireFichier(String nomFicher) {
         File file = new File(chemin + nomFicher);
         return lireFichier(file);
     }
