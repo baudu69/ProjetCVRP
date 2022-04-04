@@ -1,11 +1,14 @@
 package fr.polytech.projet.model;
 
+import javafx.scene.paint.Paint;
 import java.util.*;
 
 public class Chemin implements List<Point> {
 
 	private final List<Point> points = new ArrayList<>();
 	private boolean changed = false;
+
+	private final Paint couleur = ChoixCouleur.instance.getRandomColor();
 
 	/**
 	 * Renvoie la longueur totale du chemin
@@ -155,7 +158,11 @@ public class Chemin implements List<Point> {
 		points.clear();
 	}
 
-	/**
+    public Paint getCouleur() {
+        return couleur;
+    }
+
+    /**
      * Renvoi le nombre de camions minimums necessaires pour tout transporter
      *
      * @param C Poids maximum que peut prendre un camion
