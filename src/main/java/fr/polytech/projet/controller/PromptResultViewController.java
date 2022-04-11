@@ -16,7 +16,6 @@ import javafx.scene.shape.Line;
 
 import java.util.Arrays;
 import java.util.Random;
-import java.util.stream.IntStream;
 
 public class PromptResultViewController {
 
@@ -52,7 +51,7 @@ public class PromptResultViewController {
 
     private Solution genererSolution(Chemin chemin) {
         Random random = new Random();
-        Solution solution = new Solution();
+        Solution solution = new Solution(null);
         
         final int nbCamions = chemin.nbCamionMinimum(100) * 2;
 
@@ -100,27 +99,18 @@ public class PromptResultViewController {
      * @param chemin chemin à dessiner
      */
     private void dessinerChemin(Chemin chemin) {
-        for (int i = 0; i < chemin.size() - 1; i++) {
+        final int size = chemin.size();
+        for (int i = 0; i < size; i++) {
             Line line = new Line();
             line.setStartX(chemin.get(i).x() * coefMulti);
             line.setStartY(chemin.get(i).y() * coefMulti);
-            line.setEndX(chemin.get(i + 1).x() * coefMulti);
-            line.setEndY(chemin.get(i + 1).y() * coefMulti);
+            line.setEndX(chemin.get((i + 1) % size).x() * coefMulti);
+            line.setEndY(chemin.get((i + 1) % size).y() * coefMulti);
             line.setFill(chemin.getCouleur());
             line.setStroke(chemin.getCouleur());
             line.setStrokeWidth(3);
             this.group.getChildren().add(line);
         }
-        Line line = new Line();
-        line.setStartX(chemin.get(0).x() * coefMulti);
-        line.setStartY(chemin.get(0).y() * coefMulti);
-        line.setEndX(chemin.get(chemin.size() - 1).x() * coefMulti);
-        line.setEndY(chemin.get(chemin.size() - 1).y() * coefMulti);
-        line.setStroke(chemin.getCouleur());
-        line.setFill(chemin.getCouleur());
-        this.group.getChildren().add(line);
-
-
     }
     
     

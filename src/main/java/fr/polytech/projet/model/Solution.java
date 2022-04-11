@@ -1,7 +1,9 @@
 package fr.polytech.projet.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class Solution extends ArrayList<Chemin> {
 
@@ -17,6 +19,18 @@ public class Solution extends ArrayList<Chemin> {
 		}
 
 		return null;
+	}
+
+	public Set<Point> getPointsInRadius(Point point, double radius) {
+		final Set<Point> ret = new HashSet<>();
+
+		for (Point other : points.values()) {
+			if (other != point && point.distance(other) <= radius && other.id() > 0) {
+				ret.add(other);
+			}
+		}
+
+		return ret;
 	}
 
 	public Map<Integer, Point> getPoints() {
