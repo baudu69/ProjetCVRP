@@ -5,8 +5,7 @@ import fr.polytech.projet.model.Chemin;
 import fr.polytech.projet.model.Point;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 
 public class Lecture {
@@ -52,6 +51,24 @@ public class Lecture {
     public Chemin lireFichier(String nomFicher) {
         File file = new File(chemin + nomFicher);
         return lireFichier(file);
+    }
+
+    public Map<Integer, Point> lireFichier2(String nomFichier) {
+        final File file = new File(chemin + nomFichier);
+		
+	    try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)))) {
+		    final Map<Integer, Point> ret = new HashMap<>();
+
+		    reader.lines()
+		            .map(mapToItem)
+		            .forEach(point -> ret.put(point.id(), point));
+			
+			return ret;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return Collections.emptyMap();
     }
 
     /**

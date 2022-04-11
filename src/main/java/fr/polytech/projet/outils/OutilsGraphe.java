@@ -1,7 +1,10 @@
 package fr.polytech.projet.outils;
 
 import fr.polytech.projet.model.Chemin;
+import fr.polytech.projet.model.Point;
+import fr.polytech.projet.model.Solution;
 
+import java.util.Map;
 import java.util.Random;
 
 public class OutilsGraphe {
@@ -24,6 +27,29 @@ public class OutilsGraphe {
             chemin.remove(index);
         }
         return chemin1;
+    }
+    
+    public static Solution generateRandomSolution(Map<Integer, Point> points) {
+        Solution ret = new Solution();
+        
+        final int CAPACITY = 100;
+        
+        final Random random = new Random();
+        final int nbCamions = points.values().stream().mapToInt(Point::q).sum() / CAPACITY + 1;
+
+	    for (int i = 0; i < nbCamions; i++) {
+		    final Chemin chemin = new Chemin();
+			chemin.add(points.get(0));
+			ret.add(chemin);
+	    }
+		
+		for (final Integer id : points.keySet()) {
+			if (id != 0) {
+				ret.get(random.nextInt(nbCamions)).add(points.get(id));
+			}
+		}
+
+        return ret;
     }
 
 }

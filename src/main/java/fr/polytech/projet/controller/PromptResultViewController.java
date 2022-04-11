@@ -14,6 +14,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
+import java.util.Arrays;
 import java.util.Random;
 import java.util.stream.IntStream;
 
@@ -43,23 +44,24 @@ public class PromptResultViewController {
      */
     public void chargerPoints() {
         Lecture lecture = new Lecture();
-        Chemin chemin = OutilsGraphe.genererSolutionAleatoire(lecture.lireFichier(this.fichier));
-        solution = genererSolution(chemin);
-        solution.forEach(this::dessinerChemin);
-        solution.forEach(chemin1 -> chemin1.forEach(this::dessinerPoint));
-
+//        Chemin chemin = OutilsGraphe.genererSolutionAleatoire(lecture.lireFichier(this.fichier));
+//        solution = genererSolution(chemin);
+        solution = OutilsGraphe.generateRandomSolution(lecture.lireFichier2(this.fichier));
+        dessinerSolution(solution);
     }
 
     private Solution genererSolution(Chemin chemin) {
         Random random = new Random();
         Solution solution = new Solution();
-        IntStream
-                .range(0, chemin.nbCamionMinimum(100) * 2)
-                .mapToObj(i -> new Chemin())
-                .forEach(chemin1 -> {
-                    chemin1.add(chemin.get(0));
-                    solution.add(chemin1);
-                });
+        
+        final int nbCamions = chemin.nbCamionMinimum(100) * 2;
+
+        for (int i = 0; i < nbCamions; i++) {
+            Chemin points = new Chemin();
+            points.add(chemin.get(0));
+            solution.add(points);
+        }
+        
         for (Point point : chemin) {
             boolean passe = false;
             do {
@@ -120,10 +122,18 @@ public class PromptResultViewController {
 
 
     }
+    
+    
+    private void dessinerSolution(Solution solution) {
+        solution.forEach(this::dessinerChemin);
+        solution.forEach(chemin1 -> chemin1.forEach(this::dessinerPoint));
+    }
 
 
     @FXML
     protected void btnLancerOnClick(ActionEvent event) {
-
+		group.getChildren().clear();
+	    System.out.println(Arrays.toString(solution.get(0).toArray()));
+        dessinerSolution(solution);
     }
 }
