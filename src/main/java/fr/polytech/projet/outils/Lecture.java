@@ -60,6 +60,7 @@ public class Lecture {
 		    final Map<Integer, Point> ret = new HashMap<>();
 
 		    reader.lines()
+                    .skip(1)
 		            .map(mapToItem)
 		            .forEach(point -> ret.put(point.id(), point));
 			
