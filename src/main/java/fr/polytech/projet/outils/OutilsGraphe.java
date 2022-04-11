@@ -30,7 +30,7 @@ public class OutilsGraphe {
     }
     
     public static Solution generateRandomSolution(Map<Integer, Point> points) {
-        Solution ret = new Solution();
+        final Solution ret = new Solution(points);
         
         final int CAPACITY = 100;
         

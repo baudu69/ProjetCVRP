@@ -13,18 +13,6 @@ public class Chemin implements List<Point> {
 
 	private Double cacheLongueur = null;
 	private Integer cacheQuantity = null;
-	
-	public void swapPoints(int i1, int i2) {
-		int j1 = Math.min(i1, i2);
-		int j2 = Math.max(i1, i2);
-		
-		Point p = points.remove(j2);
-		points.add(j1, p);
-		p = points.remove(j1+1);
-		points.add(j2, p);
-		
-		changed = true;
-	}
 
 	private void updateCacheLongueur() {
 		double ret = 0;
