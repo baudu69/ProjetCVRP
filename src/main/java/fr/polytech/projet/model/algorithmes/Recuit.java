@@ -20,6 +20,7 @@ public class Recuit implements Algorithme {
 	private int n1_i = 0;
 	
 	private final Random random = new Random();
+	private final VoisinageFactory voisinageFactory = new VoisinageFactory();
 
 	public Recuit(Solution solution, double mu, double t0, int n2) {
 		if (mu < 0 || mu >= 1) throw new IllegalArgumentException("mu must be between 0 and 1");
@@ -41,7 +42,7 @@ public class Recuit implements Algorithme {
 	public void update() {
 		final double f = solution.longueur();
 		
-		Operation operation = VoisinageFactory.getRandomVoisinage(solution);
+		final Operation operation = voisinageFactory.getRandomVoisinage(solution);
 		
 		operation.apply(solution);
 		final double new_f = solution.longueur();

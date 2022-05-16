@@ -12,6 +12,7 @@ import fr.polytech.projet.model.operation.Swap;
 import fr.polytech.projet.model.operation.TwoOpt;
 import fr.polytech.projet.outils.Lecture;
 import fr.polytech.projet.outils.OutilsGraphe;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,6 +30,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PromptResultViewController {
 
@@ -176,12 +178,36 @@ public class PromptResultViewController {
 		dessinerSolution(solution);
 	}
 
+	private Thread algo_thread;
+	private AtomicBoolean stopRequested = new AtomicBoolean(false);
+
 	@FXML
 	protected void btnLancerOnClick(ActionEvent event) {
 		initAlgo();
 		this.btnArret.setDisable(false);
 		this.btnPasAPas.setDisable(true);
 		this.btnLancer.setDisable(true);
+
+		algo_thread = new Thread(() -> {
+			stopRequested.set(false);
+			while (!stopRequested.get()) {
+				try {
+					Thread.sleep(1);
+					synchronized (this) {
+						algorithme.update();
+					}
+				} catch (Exception ignored) {
+				}
+				Platform.runLater(() -> {
+					synchronized (this) {
+						group.getChildren().clear();
+						lblDistance.setText(String.format("Longueur : %.3f", solution.longueur()));
+						dessinerSolution(solution);
+					}
+				});
+			}
+		});
+		algo_thread.start();
 	}
 
 	@FXML
@@ -189,6 +215,8 @@ public class PromptResultViewController {
 		this.btnArret.setDisable(true);
 		this.btnPasAPas.setDisable(false);
 		this.btnLancer.setDisable(false);
+
+		stopRequested.set(true);
 	}
 
 	@FXML
