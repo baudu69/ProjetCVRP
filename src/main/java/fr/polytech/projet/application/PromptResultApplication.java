@@ -14,7 +14,7 @@ public class PromptResultApplication {
         PromptResultViewController controller = fxmlLoader.getController();
         controller.setFichier(nomFichier);
         controller.init();
-        stage.setTitle("Hello!");
+        stage.setTitle(nomFichier);
         stage.setScene(scene);
         stage.show();
     }

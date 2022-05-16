@@ -4,6 +4,9 @@ import fr.polytech.projet.HelloApplication;
 import fr.polytech.projet.model.Chemin;
 import fr.polytech.projet.model.Point;
 import fr.polytech.projet.model.Solution;
+import fr.polytech.projet.model.algorithmes.Algorithme;
+import fr.polytech.projet.model.algorithmes.Recuit;
+import fr.polytech.projet.model.algorithmes.Tabou;
 import fr.polytech.projet.model.operation.Operation;
 import fr.polytech.projet.model.operation.Swap;
 import fr.polytech.projet.model.operation.TwoOpt;
@@ -23,6 +26,7 @@ import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -51,13 +55,17 @@ public class PromptResultViewController {
 	private String fichier;
 	private Solution solution;
 
+	private Algorithme algorithme;
+
+	private List<Class<?>> algos = List.of(Tabou.class, Recuit.class);
+
 	public void setFichier(String fichier) {
 		this.fichier = fichier;
 		this.lblJeuChoisi.setText(String.format("Jeu choisi : %s", this.fichier));
 	}
 
 	private void initComboBoxAlgo() {
-		cbChoixAlgo.setItems(FXCollections.observableArrayList("Algo1", "Algo2", "Algo3"));
+		cbChoixAlgo.setItems(FXCollections.observableArrayList(algos.stream().map(Class::getSimpleName).toList()));
 		cbChoixAlgo.getSelectionModel().select(0);
 	}
 
@@ -155,6 +163,7 @@ public class PromptResultViewController {
 
 	@FXML
 	protected void btnPasAPasOnClick(ActionEvent event) {
+		initAlgo();
 		this.cbChoixAlgo.setDisable(true);
 		solution.forEach(System.out::println);
 
@@ -169,6 +178,7 @@ public class PromptResultViewController {
 
 	@FXML
 	protected void btnLancerOnClick(ActionEvent event) {
+		initAlgo();
 		this.cbChoixAlgo.setDisable(true);
 		this.btnArret.setDisable(false);
 		this.btnPasAPas.setDisable(true);
@@ -186,6 +196,18 @@ public class PromptResultViewController {
 	protected void btnRetourOnClick(ActionEvent event) throws IOException {
 		this.promptHelloApplication.start((Stage) btnRetour.getScene().getWindow());
 	}
+
+	private void initAlgo() {
+		if (algorithme != null) {
+			Class<?> classeAlgoChoisi = this.algos.stream().filter(algo -> algo.getSimpleName().equals(this.cbChoixAlgo.getValue())).findFirst().orElseThrow();
+			if (Recuit.class.equals(classeAlgoChoisi)) {
+				this.algorithme = new Recuit(solution, 0.99, 900, 5);
+			} else if (Tabou.class.equals(classeAlgoChoisi)) {
+				this.algorithme = new Tabou();
+			}
+		}
+	}
+
 
 	private void test() {
 		Operation operation = null;
