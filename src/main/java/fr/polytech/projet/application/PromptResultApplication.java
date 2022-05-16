@@ -13,7 +13,7 @@ public class PromptResultApplication {
         Scene scene = new Scene(fxmlLoader.load(), 800, 800);
         PromptResultViewController controller = fxmlLoader.getController();
         controller.setFichier(nomFichier);
-        controller.chargerPoints();
+        controller.init();
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
