@@ -10,4 +10,7 @@ module fr.polytech.projet {
     opens fr.polytech.projet.application to javafx.fxml;
     exports fr.polytech.projet;
     opens fr.polytech.projet to javafx.fxml;
+    
+    exports fr.polytech.projet.model;
+    exports fr.polytech.projet.model.operation;
 }

@@ -48,6 +48,10 @@ public class OutilsGraphe {
 				ret.get(random.nextInt(nbCamions)).add(points.get(id));
 			}
 		}
+		
+		for (final Chemin chemin : ret) {
+			chemin.add(points.get(0));
+		}
 
         return ret;
     }

@@ -9,6 +9,9 @@ public class Swap implements Operation {
 	private final Point b;
 
 	public Swap(Point a, Point b) {
+		if (a.isDepot()) throw new IllegalArgumentException("A cannot be Depot");
+		if (b.isDepot()) throw new IllegalArgumentException("B cannot be Depot");
+		
 		this.a = a;
 		this.b = b;
 	}

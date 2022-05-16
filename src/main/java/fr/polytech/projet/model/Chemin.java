@@ -3,6 +3,7 @@ package fr.polytech.projet.model;
 import javafx.scene.paint.Paint;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Chemin implements List<Point> {
 
@@ -192,5 +193,10 @@ public class Chemin implements List<Point> {
 	 */
 	public int nbCamionMinimum(int C) {
 		return this.quantity() % C == 0 ? this.quantity() / C : this.quantity() / C + 1;
+	}
+
+	@Override
+	public String toString() {
+		return "Chemin{" + this.stream().map(Point::id).map(String::valueOf).collect(Collectors.joining("-")) + "}";
 	}
 }
