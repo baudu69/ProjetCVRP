@@ -164,14 +164,14 @@ public class PromptResultViewController {
 	@FXML
 	protected void btnPasAPasOnClick(ActionEvent event) {
 		initAlgo();
-		this.cbChoixAlgo.setDisable(true);
 		solution.forEach(System.out::println);
 
 		group.getChildren().clear();
 
-		test();
+		algorithme.update();
 
-		System.out.println(solution.longueur());
+		lblDistance.setText(String.format("Longueur : %.3f", solution.longueur()));
+		// System.out.println(solution.longueur());
 
 		dessinerSolution(solution);
 	}
@@ -179,7 +179,6 @@ public class PromptResultViewController {
 	@FXML
 	protected void btnLancerOnClick(ActionEvent event) {
 		initAlgo();
-		this.cbChoixAlgo.setDisable(true);
 		this.btnArret.setDisable(false);
 		this.btnPasAPas.setDisable(true);
 		this.btnLancer.setDisable(true);
@@ -198,7 +197,8 @@ public class PromptResultViewController {
 	}
 
 	private void initAlgo() {
-		if (algorithme != null) {
+		this.cbChoixAlgo.setDisable(true);
+		if (algorithme == null) {
 			Class<?> classeAlgoChoisi = this.algos.stream().filter(algo -> algo.getSimpleName().equals(this.cbChoixAlgo.getValue())).findFirst().orElseThrow();
 			if (Recuit.class.equals(classeAlgoChoisi)) {
 				this.algorithme = new Recuit(solution, 0.99, 900, 5);
