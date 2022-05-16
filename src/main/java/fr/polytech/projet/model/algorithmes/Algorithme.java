@@ -1,10 +1,22 @@
 package fr.polytech.projet.model.algorithmes;
 
+import fr.polytech.projet.model.Solution;
+
 public interface Algorithme {
 
-    void lancer();
+	/**
+	 * @return The name of the algorithm.
+	 */
+	String getName();
 
-    void pasAPas();
+	/**
+	 * Computes one iteration of the algorithm.
+	 */
+	void update();
 
-    void arreter();
+	/**
+	 * @return The current solution.
+	 */
+	Solution getSolution();
+
 }

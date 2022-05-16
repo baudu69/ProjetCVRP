@@ -1,23 +1,23 @@
 package fr.polytech.projet.model.algorithmes;
 
+import fr.polytech.projet.model.Solution;
+
 public class Tabou implements Algorithme {
-    @Override
-    public void lancer() {
 
-    }
+	@Override
+	public String getName() {
+		return "Tabou";
+	}
 
-    @Override
-    public void pasAPas() {
+	@Override
+	public void update() {
+		throw new IllegalStateException("Not Implemented Yet");
+		// TODO: implement
+	}
 
-    }
+	@Override
+	public Solution getSolution() {
+		return null;
+	}
 
-    @Override
-    public void arreter() {
-
-    }
-
-    @Override
-    public String toString() {
-        return "Tabou";
-    }
 }
