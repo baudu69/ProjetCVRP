@@ -30,6 +30,8 @@
                <children>
                   <Label text="Choisir un algorithme"/>
                   <ComboBox fx:id="cbChoixAlgo" prefHeight="24.0" prefWidth="124.0"/>
+                  <Button fx:id="btnValiderAlgo" mnemonicParsing="false" onAction="#btnValiderAlgoOnClick"
+                          text="Valider"/>
                </children>
                <VBox.margin>
                   <Insets/>
@@ -51,8 +53,8 @@
                   <Button fx:id="btnPasAPas" mnemonicParsing="false" onAction="#btnPasAPasOnClick" text="Pas a Pas"/>
                   <Button fx:id="btnLancer" mnemonicParsing="false" onAction="#btnLancerOnClick" text="Lancer"/>
                   <Button fx:id="btnArret" mnemonicParsing="false" onAction="#btnArretOnClick" text="Arreter"/>
-                  <Slider fx:id="sldSpeed" blockIncrement="1.0" max="10.0" showTickLabels="true" showTickMarks="true"
-                          value="5.0"/>
+                  <Slider fx:id="sldSpeed" blockIncrement="1.0" majorTickUnit="20.0" min="1.0" minorTickCount="10"
+                          onDragDetected="#sldSpeedOnDrag" showTickLabels="true" showTickMarks="true" value="50.0"/>
                </children>
                <VBox.margin>
                   <Insets top="20.0"/>

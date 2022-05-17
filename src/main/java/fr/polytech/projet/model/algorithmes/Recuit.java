@@ -1,12 +1,13 @@
 package fr.polytech.projet.model.algorithmes;
 
-import java.util.Map;
-import java.util.Random;
-
-import fr.polytech.projet.model.Point;
 import fr.polytech.projet.model.Solution;
 import fr.polytech.projet.model.operation.Operation;
 import fr.polytech.projet.model.operation.VoisinageFactory;
+import fr.polytech.projet.model.parametres.Parametre;
+import fr.polytech.projet.model.parametres.ParametreInt;
+
+import java.util.List;
+import java.util.Random;
 
 public class Recuit implements Algorithme {
 
@@ -18,9 +19,15 @@ public class Recuit implements Algorithme {
 	private double t;
 	private int n2_i = 0;
 	private int n1_i = 0;
-	
+
 	private final Random random = new Random();
 	private final VoisinageFactory voisinageFactory = new VoisinageFactory();
+
+	List<Parametre> parametres = List.of(
+			new Parametre("Taille du voisinage", 1.0, 10.0, 5.0),
+			new Parametre("ALED du voisinage", 1.0, 10.0, 5.0),
+			new ParametreInt("ALED du voisinage Entier", 1.0, 10.0, 5.0)
+	);
 
 	public Recuit(Solution solution, double mu, double t0, int n2) {
 		if (mu < 0 || mu >= 1) throw new IllegalArgumentException("mu must be between 0 and 1");
@@ -67,6 +74,11 @@ public class Recuit implements Algorithme {
 	@Override
 	public Solution getSolution() {
 		return solution;
+	}
+
+	@Override
+	public List<Parametre> getParametres() {
+		return parametres;
 	}
 
 	@Override

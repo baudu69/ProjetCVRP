@@ -1,6 +1,9 @@
 package fr.polytech.projet.model.algorithmes;
 
 import fr.polytech.projet.model.Solution;
+import fr.polytech.projet.model.parametres.Parametre;
+
+import java.util.List;
 
 public interface Algorithme {
 
@@ -18,5 +21,10 @@ public interface Algorithme {
 	 * @return The current solution.
 	 */
 	Solution getSolution();
+
+	/**
+	 * @return liste des parametres d'un algorithme
+	 */
+	List<Parametre> getParametres();
 
 }
