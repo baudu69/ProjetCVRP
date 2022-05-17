@@ -1,14 +1,15 @@
 package fr.polytech.projet.model.algorithmes;
 
 import fr.polytech.projet.model.Solution;
-import fr.polytech.projet.model.parametres.Parametre;
+import fr.polytech.projet.model.parametres.ListeParametre;
+import fr.polytech.projet.model.parametres.ParametreDouble;
 
-import java.util.List;
+;
 
 public class Tabou implements Algorithme {
 
-	List<Parametre> parametres = List.of(new Parametre("Taille du voisinage", 1.0, 10.0, 5.0),
-			new Parametre("Taille de la liste", 1.0, 10.0, 5.0));
+	ListeParametre parametres = ListeParametre.of(new ParametreDouble("Taille du voisinage", 1.0, 10.0, 5.0),
+			new ParametreDouble("Taille de la liste", 1.0, 10.0, 5.0));
 
 	@Override
 	public String getName() {
@@ -27,7 +28,7 @@ public class Tabou implements Algorithme {
 	}
 
 	@Override
-	public List<Parametre> getParametres() {
+	public ListeParametre getParametres() {
 		return parametres;
 	}
 

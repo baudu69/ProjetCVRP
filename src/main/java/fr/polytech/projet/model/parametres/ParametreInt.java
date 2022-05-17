@@ -1,6 +1,6 @@
 package fr.polytech.projet.model.parametres;
 
-public class ParametreInt extends Parametre {
+public class ParametreInt extends ParametreDouble {
 	public ParametreInt(String nom, Double minValue, Double maxValue, Double value) {
 		super(nom, minValue, maxValue, value);
 	}

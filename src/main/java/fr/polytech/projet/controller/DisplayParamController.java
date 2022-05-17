@@ -13,7 +13,7 @@ public class DisplayParamController {
 
 	public void init() {
 		this.algorithme.getParametres()
-				.forEach(parametre -> this.vBoxMain.getChildren().add(new ParametreInterface(parametre).gethBox()));
+				.forEach(parametre -> this.vBoxMain.getChildren().add(ParametreInterface.getInstance(parametre).gethBox()));
 	}
 
 	public void setAlgorithme(Algorithme algorithme) {
