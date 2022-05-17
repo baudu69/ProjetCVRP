@@ -12,10 +12,6 @@ import java.util.Random;
 public class Recuit implements Algorithme {
 
 	private final Solution solution;
-	private final double mu;
-	private final double t0;
-	private final int n2;
-
 	private double t;
 	private int n2_i = 0;
 	private int n1_i = 0;
@@ -24,20 +20,16 @@ public class Recuit implements Algorithme {
 	private final VoisinageFactory voisinageFactory = new VoisinageFactory();
 
 	List<Parametre> parametres = List.of(
-			new Parametre("Taille du voisinage", 1.0, 10.0, 5.0),
-			new Parametre("ALED du voisinage", 1.0, 10.0, 5.0),
-			new ParametreInt("ALED du voisinage Entier", 1.0, 10.0, 5.0)
+			new Parametre("MU", 0.0, 0.9999, 0.99),
+			new Parametre("T0", 1.0, 1000.0, 900.0),
+			new ParametreInt("n2", 1.0, 10.0, 5.0)
 	);
 
-	public Recuit(Solution solution, double mu, double t0, int n2) {
-		if (mu < 0 || mu >= 1) throw new IllegalArgumentException("mu must be between 0 and 1");
+	public Recuit(Solution solution) {
 
 		this.solution = solution;
-		this.mu = mu;
-		this.t0 = t0;
-		this.n2 = n2;
 
-		this.t = t0;
+		this.t = parametres.get(1).getValue();
 	}
 
 	@Override
@@ -64,9 +56,9 @@ public class Recuit implements Algorithme {
 		}
 
 		n2_i++;
-		if (n2_i == n2) {
+		if (n2_i == parametres.get(2).getValue()) {
 			n2_i = 0;
-			t *= mu;
+			t *= this.parametres.get(0).getValue();
 			n1_i++;
 		}
 	}
@@ -84,9 +76,7 @@ public class Recuit implements Algorithme {
 	@Override
 	public String toString() {
 		return "Recuit{" +
-				"mu=" + mu + ", " +
-				"t0=" + t0 + ", " +
-				"n2=" + n2 +
+				"parametres = " + parametres +
 				"}";
 	}
 }

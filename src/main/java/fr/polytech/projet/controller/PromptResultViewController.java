@@ -238,7 +238,7 @@ public class PromptResultViewController {
 		if (algorithme == null) {
 			Class<?> classeAlgoChoisi = this.algos.stream().filter(algo -> algo.getSimpleName().equals(this.cbChoixAlgo.getValue())).findFirst().orElseThrow();
 			if (Recuit.class.equals(classeAlgoChoisi)) {
-				this.algorithme = new Recuit(solution, 0.99, 900, 5);
+				this.algorithme = new Recuit(solution);
 			} else if (Tabou.class.equals(classeAlgoChoisi)) {
 				this.algorithme = new Tabou();
 			}
