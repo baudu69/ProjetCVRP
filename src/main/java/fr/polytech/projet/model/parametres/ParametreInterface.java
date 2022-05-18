@@ -22,6 +22,8 @@ public abstract class ParametreInterface {
 	public static ParametreInterface getInstance(Parametre p) {
 		if (p instanceof ParametreDouble) {
 			return new ParametreDoubleInterface((ParametreDouble) p);
+		} else if (p instanceof ParametreListeStr) {
+			return new ParametreListeStrInterface((ParametreListeStr) p);
 		} else {
 			throw new IllegalStateException("Type de parametre non gere");
 		}

@@ -6,7 +6,9 @@ import fr.polytech.projet.model.operation.VoisinageFactory;
 import fr.polytech.projet.model.parametres.ListeParametre;
 import fr.polytech.projet.model.parametres.ParametreDouble;
 import fr.polytech.projet.model.parametres.ParametreInt;
+import fr.polytech.projet.model.parametres.ParametreListeStr;
 
+import java.util.List;
 import java.util.Random;
 
 public class Recuit implements Algorithme {
@@ -22,7 +24,8 @@ public class Recuit implements Algorithme {
 	ListeParametre parametres = ListeParametre.of(
 			new ParametreDouble("MU", 0.0, 0.9999, 0.99),
 			new ParametreDouble("T0", 1.0, 1000.0, 900.0),
-			new ParametreInt("n2", 1.0, 10.0, 5.0)
+			new ParametreInt("n2", 1.0, 10.0, 5.0),
+			new ParametreListeStr("testCB", List.of("test1", "test2"), "test1")
 	);
 
 	public Recuit(Solution solution) {
