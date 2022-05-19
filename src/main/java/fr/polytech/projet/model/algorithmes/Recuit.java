@@ -1,36 +1,35 @@
 package fr.polytech.projet.model.algorithmes;
 
-import java.util.Map;
-import java.util.Random;
-
-import fr.polytech.projet.model.Point;
 import fr.polytech.projet.model.Solution;
 import fr.polytech.projet.model.operation.Operation;
 import fr.polytech.projet.model.operation.VoisinageFactory;
+import fr.polytech.projet.model.parametres.ListeParametre;
+import fr.polytech.projet.model.parametres.ParametreDouble;
+import fr.polytech.projet.model.parametres.ParametreInt;
+
+import java.util.Random;
 
 public class Recuit implements Algorithme {
 
 	private final Solution solution;
-	private final double mu;
-	private final double t0;
-	private final int n2;
-
 	private double t;
 	private int n2_i = 0;
 	private int n1_i = 0;
-	
+
 	private final Random random = new Random();
 	private final VoisinageFactory voisinageFactory = new VoisinageFactory();
 
-	public Recuit(Solution solution, double mu, double t0, int n2) {
-		if (mu < 0 || mu >= 1) throw new IllegalArgumentException("mu must be between 0 and 1");
+	ListeParametre parametres = ListeParametre.of(
+			new ParametreDouble("MU", 0.0, 0.9999, 0.99),
+			new ParametreDouble("T0", 1.0, 1000.0, 900.0),
+			new ParametreInt("n2", 1.0, 10.0, 5.0)
+	);
+
+	public Recuit(Solution solution) {
 
 		this.solution = solution;
-		this.mu = mu;
-		this.t0 = t0;
-		this.n2 = n2;
 
-		this.t = t0;
+		this.t = ((ParametreDouble) parametres.find("MU")).getValue();
 	}
 
 	@Override
@@ -57,9 +56,9 @@ public class Recuit implements Algorithme {
 		}
 
 		n2_i++;
-		if (n2_i == n2) {
+		if (n2_i == ((ParametreInt) parametres.find("n2")).getValue()) {
 			n2_i = 0;
-			t *= mu;
+			t *= ((ParametreDouble) this.parametres.find("MU")).getValue();
 			n1_i++;
 		}
 	}
@@ -70,11 +69,14 @@ public class Recuit implements Algorithme {
 	}
 
 	@Override
+	public ListeParametre getParametres() {
+		return parametres;
+	}
+
+	@Override
 	public String toString() {
 		return "Recuit{" +
-				"mu=" + mu + ", " +
-				"t0=" + t0 + ", " +
-				"n2=" + n2 +
+				"parametreDoubles = " + parametres +
 				"}";
 	}
 }
