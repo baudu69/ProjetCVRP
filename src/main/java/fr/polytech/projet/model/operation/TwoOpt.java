@@ -39,6 +39,16 @@ public class TwoOpt implements Operation {
 	}
 
 	@Override
+	public boolean isValid(Solution solution) {
+		boolean valid = true;
+		apply(solution);
+		if (solution.getCheminContaining(a).quantity() > OperationConstantes.CAPACITY_MAX) valid = false;
+		if (solution.getCheminContaining(b).quantity() > OperationConstantes.CAPACITY_MAX) valid = false;
+		inverse().apply(solution);
+		return valid;
+	}
+
+	@Override
 	public String toString() {
 		return "TwoOpt{" + a.id() + ";" + b.id() + "}";
 	}

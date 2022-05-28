@@ -10,9 +10,17 @@ public interface Operation {
 		@Override
 		public void apply(Solution solution) {
 		}
+
 		@Override
 		public Operation inverse() {
 			return this;
 		}
+
+		@Override
+		public boolean isValid(Solution solution) {
+			return true;
+		}
 	};
+
+	boolean isValid(Solution solution);
 }

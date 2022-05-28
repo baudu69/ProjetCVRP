@@ -50,6 +50,16 @@ public class MoveFromCheminToAnother implements Operation {
 	}
 
 	@Override
+	public boolean isValid(Solution solution) {
+		boolean valid = true;
+		apply(solution);
+		if (chemin1.quantity() > OperationConstantes.CAPACITY_MAX) valid = false;
+		if (chemin2.quantity() > OperationConstantes.CAPACITY_MAX) valid = false;
+		inverse().apply(solution);
+		return valid;
+	}
+
+	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;

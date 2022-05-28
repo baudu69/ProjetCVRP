@@ -24,6 +24,7 @@ public class VoisinageSwapProche extends Voisinage {
 		List<Operation> op = getPointsPlusProche(solution, point1, tailleVoisinage - 2)
 				.stream()
 				.map(point2 -> (Operation) new Swap(point1, point2))
+				.filter(operation -> operation.isValid(solution))
 				.collect(Collectors.toList());
 		op.addAll(bougerPointDeChemin(solution));
 		return op;
@@ -40,7 +41,9 @@ public class VoisinageSwapProche extends Voisinage {
 		for (int i = 0; i < 10; i++) {
 			Point point1 = getRandomPoint(solution);
 			Point point2 = getPointPlusProcheNotInNotChemin(solution, point1, solution.getCheminContaining(point1));
-			operationList.add(new MoveFromCheminToAnother(solution.getCheminContaining(point1), solution.getCheminContaining(point2), point1));
+			Operation operation = new MoveFromCheminToAnother(solution.getCheminContaining(point1), solution.getCheminContaining(point2), point1);
+			if (operation.isValid(solution))
+				operationList.add(operation);
 		}
 		return operationList;
 	}

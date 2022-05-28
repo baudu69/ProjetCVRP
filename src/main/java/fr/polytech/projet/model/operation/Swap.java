@@ -58,4 +58,20 @@ public class Swap implements Operation {
 				", b=" + b +
 				'}';
 	}
+
+	/**
+	 * Check si le poids max n'est pas enfreint
+	 *
+	 * @param solution solution
+	 * @return validite de l'operation
+	 */
+	@Override
+	public boolean isValid(Solution solution) {
+		boolean valid = true;
+		apply(solution);
+		if (solution.getCheminContaining(a).quantity() > OperationConstantes.CAPACITY_MAX) valid = false;
+		if (solution.getCheminContaining(b).quantity() > OperationConstantes.CAPACITY_MAX) valid = false;
+		inverse().apply(solution);
+		return valid;
+	}
 }
