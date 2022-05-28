@@ -54,7 +54,7 @@
                   <Button fx:id="btnLancer" mnemonicParsing="false" onAction="#btnLancerOnClick" text="Lancer"/>
                   <Button fx:id="btnArret" mnemonicParsing="false" onAction="#btnArretOnClick" text="Arreter"/>
                   <Slider fx:id="sldSpeed" blockIncrement="1.0" majorTickUnit="20.0" min="1.0" minorTickCount="10"
-                          onDragDetected="#sldSpeedOnDrag" showTickLabels="true" showTickMarks="true" value="50.0"/>
+                          showTickLabels="true" showTickMarks="true" value="1.0"/>
                </children>
                <VBox.margin>
                   <Insets top="20.0"/>

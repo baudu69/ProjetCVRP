@@ -77,9 +77,20 @@ public class Recuit implements Algorithme {
 	}
 
 	@Override
+	public Solution stop() {
+		return solution;
+		//Not to implement
+	}
+
+	@Override
 	public String toString() {
 		return "Recuit{" +
 				"parametreDoubles = " + parametres +
 				"}";
+	}
+
+	@Override
+	public void applyParametre() {
+
 	}
 }

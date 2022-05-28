@@ -19,7 +19,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -52,7 +51,7 @@ public class PromptResultViewController {
 	@FXML
 	protected Button btnRetour;
 
-	private final List<Class<?>> algos = List.of(Recuit.class, Tabou.class);
+	private final List<Class<?>> algos = List.of(Tabou.class, Recuit.class);
 	private String fichier;
 	private Solution solution;
 
@@ -60,6 +59,8 @@ public class PromptResultViewController {
 	private final AtomicBoolean stopRequested = new AtomicBoolean(false);
 	@FXML
 	protected Button btnValiderAlgo;
+
+	private PromptDetailsController detailsController;
 
 	public void setFichier(String fichier) {
 		this.fichier = fichier;
@@ -80,11 +81,18 @@ public class PromptResultViewController {
 	}
 
 	private void initSecondView() {
-		StackPane secondaryLayout = new StackPane();
-		Scene secondScene = new Scene(secondaryLayout, 230, 100);
+		FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("scene/prompt-details-view.fxml"));
+		Scene scene = null;
+		try {
+			scene = new Scene(fxmlLoader.load(), 800, 800);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		this.detailsController = fxmlLoader.getController();
+		detailsController.init();
 		Stage newWindow = new Stage();
-		newWindow.setTitle("Details");
-		newWindow.setScene(secondScene);
+		newWindow.setTitle("Parametres");
+		newWindow.setScene(scene);
 		newWindow.show();
 	}
 
@@ -113,11 +121,12 @@ public class PromptResultViewController {
 		initComboBoxAlgo();
 		initBtn();
 		chargerPoints();
-		initSecondView();
+		//initSecondView();
 		this.tempsAttente = this.sldSpeed.getValue();
+		this.sldSpeed.valueProperty().addListener((observable, oldValue, newValue) -> sldSpeedOnDrag());
 	}
 
-	@FXML
+
 	protected void sldSpeedOnDrag() {
 		this.tempsAttente = this.sldSpeed.getValue();
 		System.out.println(tempsAttente);
@@ -182,7 +191,6 @@ public class PromptResultViewController {
 		algorithme.update();
 
 		lblDistance.setText(String.format("Longueur : %.3f", solution.longueur()));
-		// System.out.println(solution.longueur());
 
 		dessinerSolution(solution);
 	}
@@ -212,9 +220,18 @@ public class PromptResultViewController {
 						group.getChildren().clear();
 						lblDistance.setText(String.format("Longueur : %.3f", solution.longueur()));
 						dessinerSolution(solution);
+						//this.detailsController.addDistance(solution.longueur());
 					}
 				});
 			}
+			Platform.runLater(() -> {
+				synchronized (this) {
+					System.out.println("Stop");
+					group.getChildren().clear();
+					lblDistance.setText(String.format("Longueur : %.3f", algorithme.stop().longueur()));
+					dessinerSolution(algorithme.stop());
+				}
+			});
 		});
 		algo_thread.start();
 	}
@@ -240,7 +257,7 @@ public class PromptResultViewController {
 			if (Recuit.class.equals(classeAlgoChoisi)) {
 				this.algorithme = new Recuit(solution);
 			} else if (Tabou.class.equals(classeAlgoChoisi)) {
-				this.algorithme = new Tabou();
+				this.algorithme = new Tabou(solution);
 			}
 		}
 		try {

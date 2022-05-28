@@ -34,6 +34,7 @@ public class ParametreDoubleInterface extends ParametreInterface {
 		Double value = this.slider.getValue();
 		this.getParametreDouble().setValue(value);
 		this.lblValue.setText(String.format("%.2f", this.getParametreDouble().getValue()));
+		getParametreDouble().notifyParametresImpl();
 	}
 
 	private ParametreDouble getParametreDouble() {

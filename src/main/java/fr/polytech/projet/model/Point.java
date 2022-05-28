@@ -17,11 +17,15 @@ public record Point(int x, int y, int id, int q) {
 	 */
 	public double distance(final Point that) {
 		if (that == null) return 0;
-		
+
 		final int dx = x - that.x;
 		final int dy = y - that.y;
-		
+
 		return Math.sqrt(dx * dx + dy * dy);
 	}
 
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 }
