@@ -5,10 +5,7 @@ import fr.polytech.projet.model.Point;
 import fr.polytech.projet.model.Solution;
 import fr.polytech.projet.model.operation.OperationConstantes;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class OutilsGraphe {
 
@@ -39,7 +36,8 @@ public class OutilsGraphe {
 		final Random random = new Random();
 		Chemin chemin = new Chemin();
 		final Point depot = pointMap.get(0);
-		pointMap.remove(0);
+		points.remove(depot);
+		chemin.add(depot);
 		while (!points.isEmpty()) {
 			Point point = points.get(random.nextInt(points.size()));
 			if (chemin.quantity() + point.q() > CAPACITY) {
