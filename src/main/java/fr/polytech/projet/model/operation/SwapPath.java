@@ -47,4 +47,14 @@ public class SwapPath implements Operation {
 	public Operation inverse() {
 		return this;
 	}
+
+	@Override
+	public boolean isValid(Solution solution) {
+		boolean valid = true;
+		apply(solution);
+		if (solution.getCheminContaining(a).quantity() > OperationConstantes.CAPACITY_MAX) valid = false;
+		if (solution.getCheminContaining(b).quantity() > OperationConstantes.CAPACITY_MAX) valid = false;
+		inverse().apply(solution);
+		return valid;
+	}
 }

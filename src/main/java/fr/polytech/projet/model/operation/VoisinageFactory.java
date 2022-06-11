@@ -9,13 +9,15 @@ import fr.polytech.projet.model.Solution;
 
 public class VoisinageFactory {
 
-	private final double w_swap = 1;
-	private final double w_2opt = 2;
-	private final double w_pathSwap = 0;
+	private final double w_swap = 3;
+	private final double w_2opt = 10;
+	private final double w_pathSwap = 1;
+	private final double w_tfrc = 20;
+
 	private final double w_sum;
 
 	public VoisinageFactory() {
-		w_sum = w_swap + w_2opt + w_pathSwap;
+		w_sum = w_swap + w_2opt + w_pathSwap + w_tfrc;
 	}
 
 	private final Random random = new Random();
@@ -34,7 +36,7 @@ public class VoisinageFactory {
 		}
 		rand_type -= w_swap;
 		if (rand_type < w_2opt) {
-			final Chemin chemin = solution.get(random.nextInt(solution.size()));
+			final Chemin chemin = getRandomCheminNonVide(solution);
 			final int chemin$size = chemin.size() - 2;
 
 			return new TwoOpt(
@@ -49,8 +51,27 @@ public class VoisinageFactory {
 					points.get(random.nextInt(points$size - 1) + 1)
 			);
 		}
+		rand_type -= w_pathSwap;
+		if (rand_type < w_tfrc) {
+			final Chemin chemin1 = getRandomCheminNonVide(solution);
+			final Chemin chemin2 = getRandomCheminNonVide(solution);
+			
+			return new TransfertClient(
+					chemin1, random.nextInt(1, chemin1.size() - 1),
+					chemin2, random.nextInt(1, chemin2.size())
+			);
+		}
 
 		return Operation.NOP;
+	}
+	
+	private Chemin getRandomCheminNonVide(Solution solution) {
+		Chemin c;
+		final int size = solution.size();
+		do {
+			c = solution.get(random.nextInt(size));
+		} while (c.size() == 2);
+		return c;
 	}
 
 }

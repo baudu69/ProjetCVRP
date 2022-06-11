@@ -40,7 +40,7 @@ public class OutilsGraphe {
 		chemin.add(depot);
 		while (!points.isEmpty()) {
 			Point point = points.get(random.nextInt(points.size()));
-			if (chemin.quantity() + point.q() > CAPACITY) {
+			if (chemin.quantity() + point.q() > 2 * CAPACITY / 3) {
 				chemin.add(depot);
 				ret.add(chemin);
 				chemin = new Chemin();
