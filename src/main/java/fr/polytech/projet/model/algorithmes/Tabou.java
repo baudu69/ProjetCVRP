@@ -36,7 +36,7 @@ public class Tabou implements Algorithme {
 	}
 
 	@Override
-	public void update() {
+	public boolean update() {
 		//On choisis C
 		List<Operation> C = this.voisinage.getVoisinage(solution)
 				.stream()
@@ -68,6 +68,8 @@ public class Tabou implements Algorithme {
 			}
 			operationXPlus1.apply(solution);
 		}
+		
+		return true;
 	}
 
 	@Override

@@ -13,8 +13,9 @@ public interface Algorithme extends ParametreImpl {
 
 	/**
 	 * Computes one iteration of the algorithm.
+	 * @return false if the algorithm has to stop, true otherwise
 	 */
-	void update();
+	boolean update();
 
 	/**
 	 * @return The current solution.

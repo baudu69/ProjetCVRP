@@ -1,5 +1,8 @@
 package fr.polytech.projet.model.algorithmes;
 
+import java.util.List;
+import java.util.Random;
+
 import fr.polytech.projet.model.Solution;
 import fr.polytech.projet.model.operation.Operation;
 import fr.polytech.projet.model.operation.VoisinageFactory;
@@ -7,13 +10,13 @@ import fr.polytech.projet.model.parametres.ListeParametre;
 import fr.polytech.projet.model.parametres.ParametreDouble;
 import fr.polytech.projet.model.parametres.ParametreInt;
 import fr.polytech.projet.model.parametres.ParametreListeStr;
-
-import java.util.List;
-import java.util.Random;
+import fr.polytech.projet.model.settings.Settings;
+import fr.polytech.projet.model.settings.SettingsRecuit;
 
 public class Recuit implements Algorithme {
 
 	private final Solution solution;
+	private final SettingsRecuit settings;
 	private double t;
 	private int n2_i = 0;
 	private int n1_i = 0;
@@ -29,10 +32,12 @@ public class Recuit implements Algorithme {
 	);
 
 	public Recuit(Solution solution) {
-
 		this.solution = solution;
 
-		this.t = ((ParametreDouble) parametres.find("MU")).getValue();
+		this.settings = Settings.getSettings().recuit();
+		System.out.println(settings.toString());
+
+		this.t = settings.t0();
 	}
 
 	@Override
@@ -41,16 +46,22 @@ public class Recuit implements Algorithme {
 	}
 
 	@Override
-	public void update() {
+	public boolean update() {
 		final double f = solution.longueur();
-		
-		final Operation operation = voisinageFactory.getRandomVoisinage(solution);
-		
+
+		Operation operation;
+		do {
+			operation = voisinageFactory.getRandomVoisinage(solution);
+		} while (!operation.isValid(solution));
+
+		System.out.println("OPERATION: " + operation);
+		System.out.printf("t: %.4e\n", this.t);
+
 		operation.apply(solution);
 		final double new_f = solution.longueur();
 		final double delta_f = new_f - f;
-		
-		if (delta_f > 0) {
+
+		if (delta_f >= 0) {
 			double p = random.nextDouble();
 			if (p > Math.exp(-delta_f / t)) {
 				// rollback
@@ -59,11 +70,16 @@ public class Recuit implements Algorithme {
 		}
 
 		n2_i++;
-		if (n2_i == ((ParametreInt) parametres.find("n2")).getValue()) {
+		if (n2_i == settings.n2()) {
 			n2_i = 0;
-			t *= ((ParametreDouble) this.parametres.find("MU")).getValue();
+			t *= settings.mu();
 			n1_i++;
 		}
+
+		System.out.println("n1: " + n1_i);
+		System.out.println("n2: " + n2_i);
+		
+		return n1_i != settings.n1();
 	}
 
 	@Override
