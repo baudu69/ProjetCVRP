@@ -33,7 +33,7 @@ public class Tabou implements Algorithme {
 	@Override
 	public boolean update() {
 		final Set<Operation> voisinage = voisinageFactory.getFullVoisinage(solution);
-		System.out.println("Taille voisinage : " + voisinage.size());
+//		System.out.println("Taille voisinage : " + voisinage.size());
 		Operation bestOp = null;
 		double bestFitness = 0;
 
@@ -50,14 +50,14 @@ public class Tabou implements Algorithme {
 
 		if (bestOp == null) return false;
 
-		System.out.println("Operation: " + bestOp);
+//		System.out.println("Operation: " + bestOp);
 
 		double prevFitness = solution.longueur();
 
 		bestOp.apply(solution);
 
 		if (solution.longueur() >= prevFitness) {
-			System.out.println("+LISTE: " + bestOp.inverse());
+//			System.out.println("+LISTE: " + bestOp.inverse());
 			listeTabou.addLast(bestOp);
 			listeTabou.addLast(bestOp.inverse());
 			while (listeTabou.size() > settings.taille_liste_tabou()) listeTabou.pop();

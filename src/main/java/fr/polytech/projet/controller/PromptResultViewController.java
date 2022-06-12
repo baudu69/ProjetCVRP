@@ -149,10 +149,10 @@ public class PromptResultViewController {
 		solution.forEach(this::dessinerChemin);
 		solution.forEach(chemin1 -> chemin1.forEach(this::dessinerPoint));
 
-		System.out.println("Capacités :");
-		for (int i = 0, size = solution.size(); i < size; ++i) {
-			System.out.println(i + " : " + solution.get(i).quantity());
-		}
+//		System.out.println("Capacités :");
+//		for (int i = 0, size = solution.size(); i < size; ++i) {
+//			System.out.println(i + " : " + solution.get(i).quantity());
+//		}
 	}
 
 	@FXML

@@ -44,8 +44,8 @@ public class Recuit implements Algorithme {
 			operation = voisinageFactory.getRandomVoisinage(solution);
 		} while (!operation.isValid(solution));
 
-		System.out.println("OPERATION: " + operation);
-		System.out.printf("t: %.4e\n", this.t);
+//		System.out.println("OPERATION: " + operation);
+//		System.out.printf("t: %.4e\n", this.t);
 
 		operation.apply(solution);
 		final double new_f = solution.longueur();
@@ -66,8 +66,8 @@ public class Recuit implements Algorithme {
 			n1_i++;
 		}
 
-		System.out.println("n1: " + n1_i);
-		System.out.println("n2: " + n2_i);
+//		System.out.println("n1: " + n1_i);
+//		System.out.println("n2: " + n2_i);
 
 		return n1_i != settings.n1();
 	}
