@@ -4,7 +4,7 @@ import fr.polytech.projet.model.Solution;
 import fr.polytech.projet.model.parametres.ListeParametre;
 import fr.polytech.projet.model.parametres.ParametreImpl;
 
-public interface Algorithme extends ParametreImpl {
+public interface Algorithme {
 
 	/**
 	 * @return The name of the algorithm.
@@ -13,6 +13,7 @@ public interface Algorithme extends ParametreImpl {
 
 	/**
 	 * Computes one iteration of the algorithm.
+	 *
 	 * @return false if the algorithm has to stop, true otherwise
 	 */
 	boolean update();
@@ -23,12 +24,7 @@ public interface Algorithme extends ParametreImpl {
 	Solution getSolution();
 
 	/**
-	 * @return liste des parametreDoubles d'un algorithme
-	 */
-	ListeParametre getParametres();
-
-	/**
-	 * Print best solution if exist
+	 * @return the best solution if saved, the current one otherwise
 	 */
 	Solution stop();
 

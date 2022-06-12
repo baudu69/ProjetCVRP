@@ -199,4 +199,11 @@ public class Chemin implements List<Point> {
 	public String toString() {
 		return "Chemin{" + this.stream().map(Point::id).map(String::valueOf).collect(Collectors.joining("-")) + "}";
 	}
+	
+	public Chemin copy() {
+		final Chemin ret = new Chemin();
+		ret.addAll(this);
+		return ret;
+	}
+	
 }

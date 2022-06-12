@@ -11,7 +11,6 @@ public record Point(int x, int y, int id, int q) {
 	}
 
 	/**
-	 * 
 	 * @param that
 	 * @return La distance avec le point passé en paramètre
 	 */

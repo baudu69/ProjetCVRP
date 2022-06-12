@@ -100,9 +100,6 @@ public class PromptResultViewController {
 	private void initParamView() throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("scene/display-param-view.fxml"));
 		Scene scene = new Scene(fxmlLoader.load(), 800, 800);
-		DisplayParamController controller = fxmlLoader.getController();
-		controller.setAlgorithme(algorithme);
-		controller.init();
 		Stage newWindow = new Stage();
 		newWindow.setTitle("Parametres");
 		newWindow.setScene(scene);
