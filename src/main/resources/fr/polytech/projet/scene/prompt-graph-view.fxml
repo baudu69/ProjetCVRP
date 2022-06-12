@@ -7,7 +7,7 @@
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16"
             fx:controller="fr.polytech.projet.controller.PrompGraphController">
     <children>
-        <LineChart fx:id="lc_result">
+        <LineChart fx:id="lc_result" createSymbols="false">
             <xAxis>
                 <CategoryAxis side="BOTTOM"/>
             </xAxis>
