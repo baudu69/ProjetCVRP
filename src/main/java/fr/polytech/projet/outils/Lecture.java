@@ -9,7 +9,7 @@ import java.util.*;
 import java.util.function.Function;
 
 public class Lecture {
-    private static final String chemin = "src/main/resources/fr/polytech/projet/donnees/";
+    private static final String chemin = "donnees/";
 
     private final Function<String, Point> mapToItem = (line) -> {
         String[] p = line.split(";");

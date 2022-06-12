@@ -199,6 +199,7 @@ public class PromptResultViewController {
 			long attentemili = 0;
 			int attenteNano = 0;
 			stopRequested.set(false);
+			long start = System.currentTimeMillis();
 			while (!stopRequested.get()) {
 				try {
 					Thread.sleep(attentemili, attenteNano);
@@ -214,14 +215,18 @@ public class PromptResultViewController {
 				}
 				Platform.runLater(() -> {
 					synchronized (this) {
+
 						group.getChildren().clear();
 						lblDistance.setText(String.format("Longueur : %.3f", solution.longueur()));
 						dessinerSolution(solution);
+
 					}
 				});
 			}
 			Platform.runLater(() -> {
 				synchronized (this) {
+					long end = System.currentTimeMillis();
+					System.out.println("Temps : " + (end - start));
 					System.out.println("Stop");
 					group.getChildren().clear();
 					lblDistance.setText(String.format("Longueur : %.3f", algorithme.getBestSolution().longueur()));
