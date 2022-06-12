@@ -1,5 +1,9 @@
 package fr.polytech.projet.controller;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import fr.polytech.projet.HelloApplication;
 import fr.polytech.projet.model.Chemin;
 import fr.polytech.projet.model.Point;
@@ -7,14 +11,13 @@ import fr.polytech.projet.model.Solution;
 import fr.polytech.projet.model.algorithmes.Algorithme;
 import fr.polytech.projet.model.algorithmes.Recuit;
 import fr.polytech.projet.model.algorithmes.Tabou;
+import fr.polytech.projet.model.settings.Settings;
 import fr.polytech.projet.outils.Lecture;
 import fr.polytech.projet.outils.OutilsGraphe;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -23,10 +26,6 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PromptResultViewController {
 
@@ -60,8 +59,6 @@ public class PromptResultViewController {
 	@FXML
 	protected Button btnValiderAlgo;
 
-	private PromptDetailsController detailsController;
-
 	public void setFichier(String fichier) {
 		this.fichier = fichier;
 		this.lblJeuChoisi.setText(String.format("Jeu choisi : %s", this.fichier));
@@ -80,40 +77,13 @@ public class PromptResultViewController {
 		this.btnPasAPas.setDisable(true);
 	}
 
-	private void initSecondView() {
-		FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("scene/prompt-details-view.fxml"));
-		Scene scene = null;
-		try {
-			scene = new Scene(fxmlLoader.load(), 800, 800);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		this.detailsController = fxmlLoader.getController();
-		detailsController.init();
-		Stage newWindow = new Stage();
-		newWindow.setTitle("Parametres");
-		newWindow.setScene(scene);
-		newWindow.show();
-	}
-
-	private void initParamView() throws IOException {
-		FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("scene/display-param-view.fxml"));
-		Scene scene = new Scene(fxmlLoader.load(), 800, 800);
-		DisplayParamController controller = fxmlLoader.getController();
-		controller.setAlgorithme(algorithme);
-		controller.init();
-		Stage newWindow = new Stage();
-		newWindow.setTitle("Parametres");
-		newWindow.setScene(scene);
-		newWindow.show();
-	}
-
 	/**
-	 * Charge la liste des points, les dessine puis genère les chemins initiaux
+	 * Charge la liste des points, les dessine puis génère les chemins initiaux
 	 */
 	private void chargerPoints() {
 		Lecture lecture = new Lecture();
 		solution = OutilsGraphe.generateRandomSolution(lecture.lireFichier2(this.fichier));
+		solution.forEach(System.out::println);
 		dessinerSolution(solution);
 	}
 
@@ -121,7 +91,6 @@ public class PromptResultViewController {
 		initComboBoxAlgo();
 		initBtn();
 		chargerPoints();
-		//initSecondView();
 		this.tempsAttente = this.sldSpeed.getValue();
 		this.sldSpeed.valueProperty().addListener((observable, oldValue, newValue) -> sldSpeedOnDrag());
 	}
@@ -172,6 +141,11 @@ public class PromptResultViewController {
 	private void dessinerSolution(Solution solution) {
 		solution.forEach(this::dessinerChemin);
 		solution.forEach(chemin1 -> chemin1.forEach(this::dessinerPoint));
+
+		System.out.println("Capacités :");
+		for (int i = 0, size = solution.size(); i < size; ++i) {
+			System.out.println(i + " : " + solution.get(i).quantity());
+		}
 	}
 
 	@FXML
@@ -179,7 +153,12 @@ public class PromptResultViewController {
 		this.btnValiderAlgo.setDisable(true);
 		this.btnLancer.setDisable(false);
 		this.btnPasAPas.setDisable(false);
-		this.initAlgo();
+		try {
+			Settings.reloadSettings();
+			this.initAlgo();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@FXML
@@ -188,7 +167,11 @@ public class PromptResultViewController {
 
 		group.getChildren().clear();
 
-		algorithme.update();
+		try {
+			algorithme.update();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		lblDistance.setText(String.format("Longueur : %.3f", solution.longueur()));
 
@@ -207,21 +190,21 @@ public class PromptResultViewController {
 			stopRequested.set(false);
 			while (!stopRequested.get()) {
 				try {
-					//Thread.sleep(attentemili, attenteNano);
+					Thread.sleep(attentemili, attenteNano);
 					synchronized (this) {
-						algorithme.update();
+						if (!algorithme.update()) stopRequested.set(true);
 						attentemili = (long) tempsAttente;
 						attenteNano = (int) (tempsAttente - attentemili);
 					}
 				} catch (Exception e) {
-					throw new RuntimeException(e);
+					e.printStackTrace();
+					stopRequested.set(true);
 				}
 				Platform.runLater(() -> {
 					synchronized (this) {
 						group.getChildren().clear();
 						lblDistance.setText(String.format("Longueur : %.3f", solution.longueur()));
 						dessinerSolution(solution);
-						//this.detailsController.addDistance(solution.longueur());
 					}
 				});
 			}
@@ -261,10 +244,6 @@ public class PromptResultViewController {
 			} else if (Tabou.class.equals(classeAlgoChoisi)) {
 				this.algorithme = new Tabou(solution);
 			}
-		}
-		try {
-			initParamView();
-		} catch (IOException ignored) {
 		}
 	}
 }

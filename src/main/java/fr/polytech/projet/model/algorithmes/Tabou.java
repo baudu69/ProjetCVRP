@@ -1,25 +1,22 @@
 package fr.polytech.projet.model.algorithmes;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Set;
+
 import fr.polytech.projet.model.Solution;
-import fr.polytech.projet.model.algorithmes.voisinage.Voisinage;
-import fr.polytech.projet.model.algorithmes.voisinage.VoisinageSwapProche;
 import fr.polytech.projet.model.operation.Operation;
-import fr.polytech.projet.model.parametres.ListeParametre;
-import fr.polytech.projet.model.parametres.ParametreInt;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import fr.polytech.projet.model.operation.VoisinageFactoryTabou;
+import fr.polytech.projet.model.settings.Settings;
+import fr.polytech.projet.model.settings.SettingsTabou;
 
 public class Tabou implements Algorithme {
 
 	private final Solution solution;
-	private final List<Operation> opmMoins1 = new ArrayList<>();
-	private final ListeParametre parametres;
-	private final Voisinage voisinage;
-	private double fitnessMini = Double.POSITIVE_INFINITY;
-	private List<Operation> opGetBackBestSolution = new ArrayList<>();
-	private int tailleListe;
+	private final SettingsTabou settings;
+	private final Deque<Operation> listeTabou;
+	private final VoisinageFactoryTabou voisinageFactory = new VoisinageFactoryTabou();
+	private Solution bestSolution = null;
 
 	@Override
 	public String getName() {
@@ -28,51 +25,47 @@ public class Tabou implements Algorithme {
 
 	public Tabou(Solution solution) {
 		this.solution = solution;
-		parametres = ListeParametre.of(
-				new ParametreInt("Taille du voisinage", 1.0, 50.0, 5.0),
-				new ParametreInt("Taille de la liste", 1.0, 50.0, 15.0));
-		parametres.forEach(parametre -> parametre.ajouterParametreImpl(this));
-		voisinage = new VoisinageSwapProche();
+		this.settings = Settings.getSettings().tabou();
+		System.out.println(settings.toString());
+		this.listeTabou = new ArrayDeque<>(settings.taille_liste_tabou());
 	}
 
 	@Override
-	public void update() {
-		//On choisis C
-		List<Operation> C = this.voisinage.getVoisinage(solution)
-				.stream()
-				.filter(op -> !operationPresentInList(op))
-				.toList();
+	public boolean update() {
+		final Set<Operation> voisinage = voisinageFactory.getFullVoisinage(solution);
+		System.out.println("Taille voisinage : " + voisinage.size());
+		Operation bestOp = null;
+		double bestFitness = 0;
 
-
-		//On garde celui avec la plus petite fitness
-		double fitnessMiniXPlus1 = Double.POSITIVE_INFINITY;
-		Operation operationXPlus1 = null;
-		for (Operation operation : C) {
-			double fitnessxPlus1 = this.getLongueurOfOperatation(operation);
-			if (fitnessxPlus1 < fitnessMiniXPlus1) {
-				fitnessMiniXPlus1 = fitnessxPlus1;
-				operationXPlus1 = operation;
+		for (final Operation op : voisinage) {
+			if (!listeTabou.contains(op) && op.isValid(solution)) {
+				op.apply(solution);
+				if (bestOp == null || solution.longueur() < bestFitness) {
+					bestOp = op;
+					bestFitness = solution.longueur();
+				}
+				op.inverse().apply(solution);
 			}
 		}
 
-		if (operationXPlus1 != null) {
-			//On calcule les deltas
-			double deltaF = fitnessMiniXPlus1 - solution.longueur();
-			if (deltaF > 0) {
-				ajoutInverseOperationToListMMoins1(operationXPlus1);
-				opGetBackBestSolution.add(operationXPlus1.inverse());
-			}
-			if (fitnessMiniXPlus1 < fitnessMini) {
-				fitnessMini = fitnessMiniXPlus1;
-				opGetBackBestSolution = new ArrayList<>();
-			}
-			operationXPlus1.apply(solution);
-		}
-	}
+		if (bestOp == null) return false;
 
-	@Override
-	public ListeParametre getParametres() {
-		return parametres;
+		System.out.println("Operation: " + bestOp);
+
+		double prevFitness = solution.longueur();
+
+		bestOp.apply(solution);
+
+		if (solution.longueur() >= prevFitness) {
+			System.out.println("+LISTE: " + bestOp.inverse());
+			listeTabou.addLast(bestOp);
+			listeTabou.addLast(bestOp.inverse());
+			while (listeTabou.size() > settings.taille_liste_tabou()) listeTabou.pop();
+		} else if (bestSolution == null || solution.longueur() < bestSolution.longueur()) {
+			bestSolution = solution.copy();
+		}
+
+		return true;
 	}
 
 	@Override
@@ -82,52 +75,7 @@ public class Tabou implements Algorithme {
 
 	@Override
 	public Solution stop() {
-		applyListeOperationToSolution();
-		return solution;
+		return bestSolution;
 	}
 
-	/**
-	 * @param operation Operation a verifier
-	 * @return true si l'operation existe dans la liste
-	 */
-	private boolean operationPresentInList(Operation operation) {
-		return this.opmMoins1.contains(operation);
-	}
-
-	/**
-	 * @param operation Operation dont l'inverse est a ajouter
-	 */
-	private void ajoutInverseOperationToListMMoins1(Operation operation) {
-		//While au lieu de if au cas ou la taille de la liste est change
-		while (this.opmMoins1.size() >= tailleListe) {
-			this.parametres.remove(0);
-		}
-		this.opmMoins1.add(operation.inverse());
-	}
-
-	/**
-	 * @param operation operation a tester
-	 * @return fitness de la solution si l'on applique l'operation
-	 */
-	private double getLongueurOfOperatation(Operation operation) {
-		operation.apply(solution);
-		double fitnessOperation = solution.longueur();
-		operation.inverse().apply(solution);
-		return fitnessOperation;
-	}
-
-	/**
-	 * Applique la liste des operations inverse pour recuperer la solution minimale
-	 */
-	private void applyListeOperationToSolution() {
-		for (int i = opGetBackBestSolution.size() - 1; i >= 0; i--) {
-			opGetBackBestSolution.get(i).apply(solution);
-			opGetBackBestSolution.remove(i);
-		}
-	}
-
-	@Override
-	public void applyParametre() {
-		this.tailleListe = ((ParametreInt) parametres.find("Taille de la liste")).getValue().intValue();
-	}
 }

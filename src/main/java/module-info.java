@@ -3,6 +3,8 @@ module fr.polytech.projet {
     requires javafx.fxml;
 
     requires org.controlsfx.controls;
+	
+	requires com.google.gson;
 
 	exports fr.polytech.projet.controller;
 	opens fr.polytech.projet.controller to javafx.fxml;
@@ -13,6 +15,5 @@ module fr.polytech.projet {
 
 	exports fr.polytech.projet.model;
 	exports fr.polytech.projet.model.operation;
-	exports fr.polytech.projet.model.parametres;
 	exports fr.polytech.projet.model.algorithmes;
 }

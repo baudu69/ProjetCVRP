@@ -5,10 +5,10 @@ import fr.polytech.projet.model.Point;
 import fr.polytech.projet.model.Solution;
 import fr.polytech.projet.model.operation.MoveFromCheminToAnother;
 import fr.polytech.projet.model.operation.Operation;
+import fr.polytech.projet.model.operation.OperationConstantes;
 import fr.polytech.projet.model.operation.Swap;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class VoisinageSwapProche extends Voisinage {
 
 	private final static Random random = new Random();
-	private int tailleVoisinage = 30;
+	private final int tailleVoisinage = OperationConstantes.TAILLE_VOISINAGE;
 
 	@Override
 	public List<Operation> getVoisinage(Solution solution) {
@@ -64,38 +64,38 @@ public class VoisinageSwapProche extends Voisinage {
 		return operationList;
 	}
 
-
-	@Override
-	public void applyParametre() {
-
-	}
-
 	/**
 	 * @param point point
 	 * @param nbr   nombre de points a renvoyer
 	 * @return liste des points les plus proche de point
 	 */
 	private List<Point> getPointsPlusProche(Solution solution, Point point, int nbr) {
+		//On récupère la liste de tous les points
+		List<Point> points = new ArrayList<>(solution.getPoints().values()).stream().filter(point1 -> !point1.isDepot()).collect(Collectors.toList());
+
 		List<Point> pointsPlusProches = new ArrayList<>();
-		List<Point> points = solution.stream().map((chemin -> chemin.stream().toList()))
-				.flatMap(Collection::parallelStream)
-				.filter(point1 -> !point1.isDepot())
-				.collect(Collectors.toList());
+
 		for (int i = 0; i < nbr; i++) {
-			pointsPlusProches.add(
-					points.stream()
-							.filter(point1 ->
-									point1.distance(point) == points.stream()
-											.mapToDouble(point2 -> point2.distance(point))
-											.min()
-											.orElseThrow()
-							).findFirst()
-							.orElseThrow()
-			);
-			points.remove(pointsPlusProches.get(i));
+			Point pointPlusProche = getPointPlusProche(points, point);
+			points.remove(pointPlusProche);
+			pointsPlusProches.add(pointPlusProche);
 		}
-		return pointsPlusProches;
+		return pointsPlusProches.parallelStream().filter(point1 -> !point1.equals(point)).collect(Collectors.toList());
 	}
+
+	private Point getPointPlusProche(List<Point> points, Point point) {
+		Point pointPlusProche = null;
+		double distancePlusProche = Double.MAX_VALUE;
+		for (Point p : points) {
+			double distance = p.distance(point);
+			if (distance < distancePlusProche) {
+				pointPlusProche = p;
+				distancePlusProche = distance;
+			}
+		}
+		return pointPlusProche;
+	}
+
 
 	/**
 	 * @param solution solution
@@ -104,20 +104,7 @@ public class VoisinageSwapProche extends Voisinage {
 	 * @return point le plus proche qui ne se trouve pas dans le chemin
 	 */
 	private Point getPointPlusProcheNotInNotChemin(Solution solution, Point point, Chemin chemin) {
-		//ALED LE TEMPS
-//		List<Point> allPoints = getAllPointsWithoutDepot(solution);
-//		return allPoints
-//				.stream()
-//				.filter(point1 -> !chemin.contains(point1))
-//				.filter(point1 ->
-//						point1.distance(point) == allPoints.stream()
-//								.mapToDouble(point2 -> point2.distance(point))
-//								.min()
-//								.orElseThrow()
-//				).findFirst()
-//				.orElseThrow();
-
-		return getPointsPlusProche(solution, point, 10).stream().filter(point1 -> !chemin.contains(point1)).findFirst().orElseThrow();
+		return getPointsPlusProche(solution, point, 10).stream().filter(point1 -> !chemin.contains(point1)).findFirst().orElseThrow(() -> new RuntimeException("pas de point plus proche"));
 
 	}
 
@@ -135,9 +122,6 @@ public class VoisinageSwapProche extends Voisinage {
 	 * @return tous les points de la solution (non depot)
 	 */
 	private List<Point> getAllPointsWithoutDepot(Solution solution) {
-		return solution.stream().map((chemin -> chemin.stream().toList()))
-				.flatMap(Collection::parallelStream)
-				.filter(point1 -> !point1.isDepot())
-				.toList();
+		return solution.getPoints().values().stream().filter(point1 -> !point1.isDepot()).collect(Collectors.toList());
 	}
 }

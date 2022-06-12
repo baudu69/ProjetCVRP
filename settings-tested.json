@@ -1,0 +1,30 @@
+{
+	"A3205.txt": {
+		"recuit": {
+			"t0": 20,
+			"mu": 0.95,
+			"n1": 100,
+			"n2": 100,
+			"poids_voisinage": {
+				"swap": 1,
+				"two_opt": 4,
+				"transfert_client": 4,
+				"swap_path": 1
+			}
+		}
+	},
+	"r101.txt": {
+		"recuit": {
+			"t0": 20,
+			"mu": 0.95,
+			"n1": 100,
+			"n2": 300,
+			"poids_voisinage": {
+				"swap": 1,
+				"two_opt": 4,
+				"transfert_client": 4,
+				"swap_path": 1
+			}
+		}
+	}
+}

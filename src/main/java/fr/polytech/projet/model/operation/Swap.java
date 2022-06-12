@@ -1,10 +1,12 @@
 package fr.polytech.projet.model.operation;
 
+import java.util.Objects;
+import java.util.Set;
+
 import fr.polytech.projet.model.Chemin;
 import fr.polytech.projet.model.Point;
 import fr.polytech.projet.model.Solution;
-
-import java.util.Objects;
+import fr.polytech.projet.model.settings.Settings;
 
 public class Swap implements Operation {
 	private final Point a;
@@ -43,12 +45,12 @@ public class Swap implements Operation {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Swap swap = (Swap) o;
-		return Objects.equals(a, swap.a) && Objects.equals(b, swap.b);
+		return Objects.equals(Set.of(a, b), Set.of(swap.a, swap.b));
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(a, b);
+		return Objects.hash(Set.of(a, b));
 	}
 
 	@Override

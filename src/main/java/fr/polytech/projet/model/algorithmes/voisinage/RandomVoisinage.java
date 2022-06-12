@@ -6,22 +6,14 @@ import fr.polytech.projet.model.Solution;
 import fr.polytech.projet.model.operation.MoveFromCheminToAnother;
 import fr.polytech.projet.model.operation.Operation;
 import fr.polytech.projet.model.operation.Swap;
-import fr.polytech.projet.model.parametres.ListeParametre;
-import fr.polytech.projet.model.parametres.ParametreInt;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class RandomVoisinage extends Voisinage {
-	private final ListeParametre listeParametre;
 	private final Random random = new Random();
 	private int taileVoisinage;
-
-	public RandomVoisinage(ListeParametre parametres) {
-		listeParametre = parametres;
-		applyParametre();
-	}
 
 	public List<Operation> getVoisinage(Solution solution) {
 		double r = random.nextDouble();
@@ -71,11 +63,5 @@ public class RandomVoisinage extends Voisinage {
 
 	public int getTailleVoisinage() {
 		return taileVoisinage;
-	}
-
-
-	@Override
-	public void applyParametre() {
-		taileVoisinage = ((ParametreInt) listeParametre.find("Taille du voisinage")).getValue().intValue();
 	}
 }

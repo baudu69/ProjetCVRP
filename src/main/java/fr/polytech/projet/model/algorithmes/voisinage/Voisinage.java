@@ -3,12 +3,11 @@ package fr.polytech.projet.model.algorithmes.voisinage;
 import fr.polytech.projet.model.Chemin;
 import fr.polytech.projet.model.Solution;
 import fr.polytech.projet.model.operation.Operation;
-import fr.polytech.projet.model.parametres.ParametreImpl;
 
 import java.util.List;
 import java.util.Random;
 
-public abstract class Voisinage implements ParametreImpl {
+public abstract class Voisinage {
 
 	private static final Random random = new Random();
 

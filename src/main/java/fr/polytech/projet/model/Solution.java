@@ -43,4 +43,10 @@ public class Solution extends ArrayList<Chemin> {
 				.sum();
 	}
 
+	public Solution copy() {
+		final Solution ret = new Solution(points);
+		for (final Chemin c : this) ret.add(c.copy());
+		return ret;
+	}
+
 }

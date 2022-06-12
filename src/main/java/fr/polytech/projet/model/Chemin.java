@@ -189,14 +189,21 @@ public class Chemin implements List<Point> {
 	 * Renvoi le nombre de camions minimums necessaires pour tout transporter
 	 *
 	 * @param C Poids maximum que peut prendre un camion
-	 * @return nombre de camions
-	 */
-	public int nbCamionMinimum(int C) {
-		return this.quantity() % C == 0 ? this.quantity() / C : this.quantity() / C + 1;
-	}
+     * @return nombre de camions
+     */
+    public int nbCamionMinimum(int C) {
+        return this.quantity() % C == 0 ? this.quantity() / C : this.quantity() / C + 1;
+    }
 
 	@Override
 	public String toString() {
 		return "Chemin{" + this.stream().map(Point::id).map(String::valueOf).collect(Collectors.joining("-")) + "}";
 	}
+
+	public Chemin copy() {
+		final Chemin ret = new Chemin();
+		ret.addAll(this);
+		return ret;
+	}
+
 }
