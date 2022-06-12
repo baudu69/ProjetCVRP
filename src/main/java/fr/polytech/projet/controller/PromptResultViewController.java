@@ -13,7 +13,9 @@ import fr.polytech.projet.outils.OutilsGraphe;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -234,8 +236,8 @@ public class PromptResultViewController {
 		this.btnArret.setDisable(true);
 		this.btnPasAPas.setDisable(false);
 		this.btnLancer.setDisable(false);
-
 		stopRequested.set(true);
+		affichageHistorique();
 	}
 
 	@FXML
@@ -269,5 +271,22 @@ public class PromptResultViewController {
 				.replace('.', ','));
 		clipboard.setContents(stringSelection, null);
 		System.out.println("Données copiées sur le presse-papier");
+	}
+
+	private void affichageHistorique() {
+		FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("scene/prompt-graph-view.fxml"));
+		Scene scene = null;
+		try {
+			scene = new Scene(fxmlLoader.load(), 800, 800);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		PrompGraphController controller = fxmlLoader.getController();
+		controller.setValue(new ArrayList<>(this.solutionFitnessHistory));
+		Stage newWindow = new Stage();
+		newWindow.setTitle("Parametres");
+		newWindow.setScene(scene);
+		newWindow.show();
+
 	}
 }
