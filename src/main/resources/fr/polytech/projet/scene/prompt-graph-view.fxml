@@ -3,18 +3,23 @@
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16"
             fx:controller="fr.polytech.projet.controller.PrompGraphController">
     <children>
-        <LineChart fx:id="lc_result" createSymbols="false">
-            <xAxis>
-                <CategoryAxis side="BOTTOM"/>
-            </xAxis>
-            <yAxis>
-                <NumberAxis side="LEFT"/>
-            </yAxis>
-        </LineChart>
+        <VBox>
+            <LineChart fx:id="lc_result" createSymbols="false">
+                <xAxis>
+                    <CategoryAxis side="BOTTOM"/>
+                </xAxis>
+                <yAxis>
+                    <NumberAxis side="LEFT"/>
+                </yAxis>
+            </LineChart>
+            <Label fx:id="lblOptimum"/>
+        </VBox>
     </children>
 
 </AnchorPane>
