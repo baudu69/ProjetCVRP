@@ -112,12 +112,14 @@ public class VoisinageFactoryTabou {
 		for (final Chemin c1 : solution) {
 			for (final Chemin c2 : solution) {
 				if (c1 != c2) {
-					for (final Point p1 : c1) {
-						if (!p1.isDepot()) {
-							for (final Point p2 : c2) {
-								if (!p2.isDepot()) {
-									ret.add(new SwapPath(p1, p2));
-								}
+					final int c1$size = c1.size();
+					for (int i = 1; i < c1$size; i++) {
+						final Point p1 = c1.get(i);
+						final int c2$size = c2.size();
+						for (int j = 1; j < c2$size; j++) {
+							final Point p2 = c2.get(j);
+							if ((i != 1 || j != 1) && (i != c1$size - 1 || j != c2$size - 1)) {
+								ret.add(new SwapPath(p1, p2));
 							}
 						}
 					}
