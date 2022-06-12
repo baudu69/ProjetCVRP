@@ -1,10 +1,12 @@
 module fr.polytech.projet {
-    requires javafx.controls;
-    requires javafx.fxml;
+	requires javafx.controls;
+	requires javafx.fxml;
 
-    requires org.controlsfx.controls;
-	
+	requires org.controlsfx.controls;
+
 	requires com.google.gson;
+	requires java.datatransfer;
+	requires java.desktop;
 
 	exports fr.polytech.projet.controller;
 	opens fr.polytech.projet.controller to javafx.fxml;

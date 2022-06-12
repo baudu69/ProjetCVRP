@@ -1,9 +1,5 @@
 package fr.polytech.projet.controller;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import fr.polytech.projet.HelloApplication;
 import fr.polytech.projet.model.Chemin;
 import fr.polytech.projet.model.Point;
@@ -27,6 +23,15 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
+
 public class PromptResultViewController {
 
 	public static final int coefMulti = 5;
@@ -49,6 +54,8 @@ public class PromptResultViewController {
 	protected Slider sldSpeed;
 	@FXML
 	protected Button btnRetour;
+
+	private final List<Double> solutionFitnessHistory = new ArrayList<>();
 
 	private final List<Class<?>> algos = List.of(Tabou.class, Recuit.class);
 	private String fichier;
@@ -195,6 +202,7 @@ public class PromptResultViewController {
 						if (!algorithme.update()) stopRequested.set(true);
 						attentemili = (long) tempsAttente;
 						attenteNano = (int) (tempsAttente - attentemili);
+						this.solutionFitnessHistory.add(algorithme.getSolution().longueur());
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -205,6 +213,7 @@ public class PromptResultViewController {
 						group.getChildren().clear();
 						lblDistance.setText(String.format("Longueur : %.3f", solution.longueur()));
 						dessinerSolution(solution);
+						afficherHistorique();
 					}
 				});
 			}
@@ -212,8 +221,8 @@ public class PromptResultViewController {
 				synchronized (this) {
 					System.out.println("Stop");
 					group.getChildren().clear();
-					lblDistance.setText(String.format("Longueur : %.3f", algorithme.stop().longueur()));
-					dessinerSolution(algorithme.stop());
+					lblDistance.setText(String.format("Longueur : %.3f", algorithme.getBestSolution().longueur()));
+					dessinerSolution(algorithme.getBestSolution());
 				}
 			});
 		});
@@ -245,5 +254,20 @@ public class PromptResultViewController {
 				this.algorithme = new Tabou(solution);
 			}
 		}
+	}
+
+
+	/**
+	 * Affiche l'historique de la fitness
+	 */
+	private void afficherHistorique() {
+		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		StringSelection stringSelection = new StringSelection(this.solutionFitnessHistory
+				.stream()
+				.map(aDouble -> String.format("%.3f", aDouble))
+				.collect(Collectors.joining("\n"))
+				.replace('.', ','));
+		clipboard.setContents(stringSelection, null);
+		System.out.println("Données copiées sur le presse-papier");
 	}
 }

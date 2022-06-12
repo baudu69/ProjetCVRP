@@ -78,7 +78,7 @@ public class Recuit implements Algorithme {
 	}
 
 	@Override
-	public Solution stop() {
+	public Solution getBestSolution() {
 		return solution;
 		//Not to implement
 	}
