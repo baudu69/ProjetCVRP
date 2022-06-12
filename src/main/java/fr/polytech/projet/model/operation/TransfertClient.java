@@ -1,28 +1,33 @@
 package fr.polytech.projet.model.operation;
 
+import java.util.Objects;
+
 import fr.polytech.projet.model.Chemin;
 import fr.polytech.projet.model.Solution;
 
 public class TransfertClient implements Operation {
 
-	private final Chemin cheminSrc;
+	private final int indexCheminSrc;
 	private final int indexSrc;
-	private final Chemin cheminDst;
+	private final int indexCheminDst;
 	private final int indexDst;
 
-	public TransfertClient(Chemin cheminSrc, int indexSrc, Chemin cheminDst, int indexDst) {
-		this.cheminSrc = cheminSrc;
+	public TransfertClient(int indexCheminSrc, int indexSrc, int indexCheminDst, int indexDst) {
+		this.indexCheminSrc = indexCheminSrc;
 		this.indexSrc = indexSrc;
-		this.cheminDst = cheminDst;
+		this.indexCheminDst = indexCheminDst;
 		this.indexDst = indexDst;
 	}
 
 	@Override
 	public void apply(Solution solution) {
-		if (indexSrc == 0) throw new IllegalArgumentException("indexSrc cannot be 0");
-		if (indexSrc >= cheminSrc.size() - 1) throw new IllegalArgumentException("indexSrc cannot be >= cheminSrc.size() - 1");
-		if (indexDst == 0) throw new IllegalArgumentException("indexDst cannot be 0");
-		if (indexDst >= cheminDst.size()) throw new IllegalArgumentException("indexDst cannot be >= cheminDst.size()");
+		final Chemin cheminSrc = solution.get(indexCheminSrc);
+		final Chemin cheminDst = solution.get(indexCheminDst);
+
+		if (indexSrc == 0) throw new IllegalArgumentException("Condition non vérifiée : indexSrc != 0");
+		if (indexSrc >= cheminSrc.size() - 1) throw new IllegalArgumentException("Condition non vérifiée : indexSrc < cheminSrc.size() - 1");
+		if (indexDst == 0) throw new IllegalArgumentException("Condition non vérifiée : indexDst != 0");
+		if (indexDst >= cheminDst.size()) throw new IllegalArgumentException("Condition non vérifiée : indexDst < cheminDst.size() - 1");
 
 		if (cheminDst == cheminSrc && indexDst > indexSrc) {
 			cheminDst.add(indexDst - 1, cheminSrc.remove(indexSrc));
@@ -33,12 +38,12 @@ public class TransfertClient implements Operation {
 
 	@Override
 	public Operation inverse() {
-		if (cheminDst == cheminSrc) {
-			if (indexDst > indexSrc) return new TransfertClient(cheminDst, indexDst - 1, cheminSrc, indexSrc);
-			else if (indexDst < indexSrc) return new TransfertClient(cheminDst, indexDst, cheminSrc, indexSrc + 1);
+		if (indexCheminDst == indexCheminSrc) {
+			if (indexDst > indexSrc) return new TransfertClient(indexCheminDst, indexDst - 1, indexCheminSrc, indexSrc);
+			else if (indexDst < indexSrc) return new TransfertClient(indexCheminDst, indexDst, indexCheminSrc, indexSrc + 1);
 		}
 
-		return new TransfertClient(cheminDst, indexDst, cheminSrc, indexSrc);
+		return new TransfertClient(indexCheminDst, indexDst, indexCheminSrc, indexSrc);
 	}
 
 	@Override
@@ -47,7 +52,7 @@ public class TransfertClient implements Operation {
 
 		this.apply(solution);
 
-		if (cheminDst.quantity() > OperationConstantes.CAPACITY_MAX) valid = false;
+		if (solution.get(indexCheminDst).quantity() > OperationConstantes.CAPACITY_MAX) valid = false;
 
 		this.inverse().apply(solution);
 
@@ -56,6 +61,23 @@ public class TransfertClient implements Operation {
 
 	@Override
 	public String toString() {
-		return "TFRC{" + indexSrc + "," + indexDst + "}";
+		return "TFRC{" + indexCheminSrc + "," + indexSrc + ";" + indexCheminDst + "," + indexDst + "}";
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		TransfertClient that = (TransfertClient) o;
+		return indexCheminSrc == that.indexCheminSrc
+				&& indexSrc == that.indexSrc
+				&& indexCheminDst == that.indexCheminDst
+				&& indexDst == that.indexDst;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(indexCheminSrc, indexSrc, indexCheminDst, indexDst);
+	}
+
 }

@@ -1,8 +1,11 @@
 package fr.polytech.projet.model.algorithmes;
 
+import java.util.Random;
+
 import fr.polytech.projet.model.Solution;
 import fr.polytech.projet.model.operation.Operation;
 import fr.polytech.projet.model.operation.VoisinageFactory;
+import fr.polytech.projet.model.operation.VoisinageFactoryRecuit;
 import fr.polytech.projet.model.settings.Settings;
 import fr.polytech.projet.model.settings.SettingsRecuit;
 
@@ -19,6 +22,7 @@ public class Recuit implements Algorithme {
 	private final Random random = new Random();
 	private final VoisinageFactory voisinageFactory = new VoisinageFactory();
 
+	private final VoisinageFactoryRecuit voisinageFactory = new VoisinageFactoryRecuit();
 
 	public Recuit(Solution solution) {
 		this.solution = solution;

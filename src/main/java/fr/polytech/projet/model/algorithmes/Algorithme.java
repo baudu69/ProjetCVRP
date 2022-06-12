@@ -11,6 +11,7 @@ public interface Algorithme {
 
 	/**
 	 * Computes one iteration of the algorithm.
+	 *
 	 * @return false if the algorithm has to stop, true otherwise
 	 */
 	boolean update();
@@ -21,11 +22,7 @@ public interface Algorithme {
 	Solution getSolution();
 
 	/**
-	 * @return liste des parametreDoubles d'un algorithme
-	 */
-
-	/**
-	 * Print best solution if exist
+	 * @return the best solution if saved, the current one otherwise
 	 */
 	Solution stop();
 

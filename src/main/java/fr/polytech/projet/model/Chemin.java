@@ -195,14 +195,15 @@ public class Chemin implements List<Point> {
         return this.quantity() % C == 0 ? this.quantity() / C : this.quantity() / C + 1;
     }
 
-    @Override
-    public String toString() {
-        return "Chemin{" + this.stream().map(Point::id).map(String::valueOf).collect(Collectors.joining("-")) + "}";
-    }
+	@Override
+	public String toString() {
+		return "Chemin{" + this.stream().map(Point::id).map(String::valueOf).collect(Collectors.joining("-")) + "}";
+	}
 
-    public Object clone() {
-        Chemin chemin = new Chemin();
-        chemin.addAll(this);
-        return chemin;
-    }
+	public Chemin copy() {
+		final Chemin ret = new Chemin();
+		ret.addAll(this);
+		return ret;
+	}
+
 }

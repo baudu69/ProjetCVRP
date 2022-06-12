@@ -23,10 +23,13 @@ public class SettingsRecuit {
 	public int n2() {
 		return n2;
 	}
+	public SettingsVoisinage poids_voisinage() {
+		return poids_voisinage;
+	}
 
 	@Override
 	public String toString() {
-		return "SettingsRecuit{t0=" + t0 + ", mu=" + mu + ", n1=" + n1 + ", n2=" + n2 + "}";
+		return Settings.GSON.toJson(this);
 	}
 
 	public static class SettingsVoisinage {
@@ -34,6 +37,8 @@ public class SettingsRecuit {
 		private double two_opt;
 		private double transfert_client;
 		private double swap_path;
+
+		private Double sum = null;
 
 		SettingsVoisinage() {
 		}
@@ -49,6 +54,12 @@ public class SettingsRecuit {
 		}
 		public double swap_path() {
 			return swap_path;
+		}
+
+		public double sum() {
+			if (sum == null)
+				sum = swap + two_opt + transfert_client + swap_path;
+			return sum;
 		}
 	}
 }

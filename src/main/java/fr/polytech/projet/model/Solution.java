@@ -43,10 +43,10 @@ public class Solution extends ArrayList<Chemin> {
 				.sum();
 	}
 
-	@Override
-	public Object clone() {
-		Solution solution = new Solution(points);
-		solution.addAll(this.stream().map(chemin -> (Chemin) chemin.clone()).toList());
-		return solution;
+	public Solution copy() {
+		final Solution ret = new Solution(points);
+		for (final Chemin c : this) ret.add(c.copy());
+		return ret;
 	}
+
 }

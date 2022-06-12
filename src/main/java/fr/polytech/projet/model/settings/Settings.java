@@ -7,7 +7,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 
 public class Settings {
-	private static final Gson GSON = new GsonBuilder().create();
+	static final Gson GSON = new GsonBuilder().create();
 	private static Settings settings = null;
 
 	public static Settings getSettings() {
@@ -16,10 +16,13 @@ public class Settings {
 
 	public static void reloadSettings() throws Exception {
 		settings = GSON.fromJson(new JsonReader(new FileReader("settings.json")), Settings.class);
+
+		if (settings.tabou.taille_liste_tabou() < 1) throw new IllegalArgumentException("taille_liste_tabou doit être strictement positive");
+		// TODO: autres restrictions sur les paramètres
 	}
 
 
-
+	private SettingsTabou tabou;
 	private SettingsRecuit recuit;
 
 	Settings() {
@@ -27,5 +30,8 @@ public class Settings {
 
 	public SettingsRecuit recuit() {
 		return recuit;
+	}
+	public SettingsTabou tabou() {
+		return tabou;
 	}
 }

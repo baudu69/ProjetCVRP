@@ -34,30 +34,30 @@ public class TransfertClientTest {
 		chemin1.add(pointMap.get(0));
 		chemin2.add(pointMap.get(0));
 
-		final TransfertClient op1 = new TransfertClient(chemin1, 1, chemin1, 3);
-		final TransfertClient op2 = new TransfertClient(chemin1, 1, chemin2, 3);
-		final TransfertClient op3 = new TransfertClient(chemin1, 1, chemin2, 5);
-		final TransfertClient op4 = new TransfertClient(chemin1, 1, chemin1, 5);
-		final TransfertClient op5 = new TransfertClient(chemin1, 3, chemin1, 3);
-		final TransfertClient op6 = new TransfertClient(chemin1, 4, chemin1, 1);
+		final TransfertClient op1 = new TransfertClient(0, 1, 0, 3);
+		final TransfertClient op2 = new TransfertClient(0, 1, 1, 3);
+		final TransfertClient op3 = new TransfertClient(0, 1, 1, 5);
+		final TransfertClient op4 = new TransfertClient(0, 1, 0, 5);
+		final TransfertClient op5 = new TransfertClient(0, 3, 0, 3);
+		final TransfertClient op6 = new TransfertClient(0, 4, 0, 1);
 
-		assertEquals("TFRC{1,3}", op1.toString());
-		assertEquals("TFRC{2,1}", op1.inverse().toString());
+		assertEquals("TFRC{0,1;0,3}", op1.toString());
+		assertEquals("TFRC{0,2;0,1}", op1.inverse().toString());
 
-		assertEquals("TFRC{1,3}", op2.toString());
-		assertEquals("TFRC{3,1}", op2.inverse().toString());
+		assertEquals("TFRC{0,1;1,3}", op2.toString());
+		assertEquals("TFRC{1,3;0,1}", op2.inverse().toString());
 
-		assertEquals("TFRC{1,5}", op3.toString());
-		assertEquals("TFRC{5,1}", op3.inverse().toString());
+		assertEquals("TFRC{0,1;1,5}", op3.toString());
+		assertEquals("TFRC{1,5;0,1}", op3.inverse().toString());
 
-		assertEquals("TFRC{1,5}", op4.toString());
-		assertEquals("TFRC{4,1}", op4.inverse().toString());
+		assertEquals("TFRC{0,1;0,5}", op4.toString());
+		assertEquals("TFRC{0,4;0,1}", op4.inverse().toString());
 
-		assertEquals("TFRC{3,3}", op5.toString());
-		assertEquals("TFRC{3,3}", op5.inverse().toString());
+		assertEquals("TFRC{0,3;0,3}", op5.toString());
+		assertEquals("TFRC{0,3;0,3}", op5.inverse().toString());
 
-		assertEquals("TFRC{4,1}", op6.toString());
-		assertEquals("TFRC{1,5}", op6.inverse().toString());
+		assertEquals("TFRC{0,4;0,1}", op6.toString());
+		assertEquals("TFRC{0,1;0,5}", op6.inverse().toString());
 
 
 		assertEquals("Chemin{0-1-2-3-4-0}", chemin1.toString());
@@ -117,10 +117,10 @@ public class TransfertClientTest {
 		assertEquals("Chemin{0-1-2-3-4-0}", chemin1.toString());
 		assertEquals("Chemin{0-5-6-7-8-0}", chemin2.toString());
 
-		assertThrows(IllegalArgumentException.class, () -> new TransfertClient(chemin1, 0, chemin2, 2).apply(solution));
-		assertThrows(IllegalArgumentException.class, () -> new TransfertClient(chemin1, 5, chemin2, 2).apply(solution));
-		assertThrows(IllegalArgumentException.class, () -> new TransfertClient(chemin1, 2, chemin2, 0).apply(solution));
-		assertThrows(IllegalArgumentException.class, () -> new TransfertClient(chemin1, 2, chemin2, 6).apply(solution));
+		assertThrows(IllegalArgumentException.class, () -> new TransfertClient(0, 0, 1, 2).apply(solution));
+		assertThrows(IllegalArgumentException.class, () -> new TransfertClient(0, 5, 1, 2).apply(solution));
+		assertThrows(IllegalArgumentException.class, () -> new TransfertClient(0, 2, 1, 0).apply(solution));
+		assertThrows(IllegalArgumentException.class, () -> new TransfertClient(0, 2, 1, 6).apply(solution));
 	}
 
 }
