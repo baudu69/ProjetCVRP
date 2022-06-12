@@ -1,14 +1,14 @@
 package fr.polytech.projet.model.algorithmes;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.Set;
-
 import fr.polytech.projet.model.Solution;
 import fr.polytech.projet.model.operation.Operation;
 import fr.polytech.projet.model.operation.VoisinageFactoryTabou;
 import fr.polytech.projet.model.settings.Settings;
 import fr.polytech.projet.model.settings.SettingsTabou;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Set;
 
 public class Tabou implements Algorithme {
 
@@ -74,7 +74,7 @@ public class Tabou implements Algorithme {
 	}
 
 	@Override
-	public Solution stop() {
+	public Solution getBestSolution() {
 		return bestSolution;
 	}
 

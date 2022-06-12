@@ -2,7 +2,7 @@
 	"tabou": {
 		"taille_liste_tabou": 1000,
 		"operations_voisinage": {
-			"swap": false,
+			"swap": true,
 			"two_opt": true,
 			"transfert_client": true,
 			"swap_path": false

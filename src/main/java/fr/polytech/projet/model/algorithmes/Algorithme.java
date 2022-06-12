@@ -24,6 +24,7 @@ public interface Algorithme {
 	/**
 	 * @return the best solution if saved, the current one otherwise
 	 */
-	Solution stop();
+	Solution getBestSolution();
+
 
 }
