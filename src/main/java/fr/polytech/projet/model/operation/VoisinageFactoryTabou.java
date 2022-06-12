@@ -1,14 +1,13 @@
 package fr.polytech.projet.model.operation;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import fr.polytech.projet.model.Chemin;
 import fr.polytech.projet.model.Point;
 import fr.polytech.projet.model.Solution;
 import fr.polytech.projet.model.settings.Settings;
 import fr.polytech.projet.model.settings.SettingsTabou;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class VoisinageFactoryTabou {
 
@@ -70,23 +69,28 @@ public class VoisinageFactoryTabou {
 		return ret;
 	}
 
+
 	private Set<TransfertClient> getFullVoisinageTransfertClient(Solution solution) {
 		final Set<TransfertClient> ret = new HashSet<>();
 
 		final int size = solution.size();
 
+		// On parcourt tous les chemins
 		for (int i_c_src = 0; i_c_src < size; i_c_src++) {
 			final Chemin c_src = solution.get(i_c_src);
 			final int i_src_max = c_src.size() - 1;
-
+			// On parcourt tous les points du chemin
 			for (int i_src = 1; i_src < i_src_max; i_src++) {
 
+				// On parcourt tous les autres chemins
 				for (int i_c_dst = 0; i_c_dst < size; i_c_dst++) {
 					final Chemin c_dst = solution.get(i_c_dst);
 					final int i_dst_max = c_dst.size() - 1;
 
+					// On parcourt tous les points du chemin
 					for (int i_dst = 1; i_dst < i_dst_max; i_dst++) {
 
+						// On ne peut pas transférer un client dans un chemin qui lui-même contient un client
 						if (!c_src.equals(c_dst) || i_dst - i_src < -1 || i_dst - i_src > 2) {
 							ret.add(new TransfertClient(i_c_src, i_src, i_c_dst, i_dst));
 						}
