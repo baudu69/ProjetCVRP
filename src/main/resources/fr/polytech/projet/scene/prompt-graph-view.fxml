@@ -4,10 +4,10 @@
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="470.0" maxWidth="250.0" prefHeight="460.0" prefWidth="250.0"
-            xmlns="http://javafx.com/javafx/16" fx:controller="fr.polytech.projet.controller.PrompGraphController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16"
+            fx:controller="fr.polytech.projet.controller.PrompGraphController">
     <children>
-        <LineChart layoutX="-135.0">
+        <LineChart fx:id="lc_result">
             <xAxis>
                 <CategoryAxis side="BOTTOM"/>
             </xAxis>
