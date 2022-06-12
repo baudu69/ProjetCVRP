@@ -1,18 +1,18 @@
 {
 	"tabou": {
-		"taille_liste_tabou": 10,
+		"taille_liste_tabou": 500,
 		"operations_voisinage": {
 			"swap": true,
 			"two_opt": true,
 			"transfert_client": true,
-			"swap_path": false
+			"swap_path": true
 		}
 	},
 	"recuit": {
 		"t0": 20,
 		"mu": 0.95,
 		"n1": 100,
-		"n2": 100,
+		"n2": 300,
 		"poids_voisinage": {
 			"swap": 1,
 			"two_opt": 4,
