@@ -1,15 +1,13 @@
 package fr.polytech.projet.model.algorithmes;
 
-import java.util.Random;
-
 import fr.polytech.projet.model.Solution;
 import fr.polytech.projet.model.operation.Operation;
-import fr.polytech.projet.model.operation.VoisinageFactory;
 import fr.polytech.projet.model.operation.VoisinageFactoryRecuit;
 import fr.polytech.projet.model.settings.Settings;
 import fr.polytech.projet.model.settings.SettingsRecuit;
 
 import java.util.Random;
+
 
 public class Recuit implements Algorithme {
 
@@ -20,7 +18,6 @@ public class Recuit implements Algorithme {
 	private int n1_i = 0;
 
 	private final Random random = new Random();
-	private final VoisinageFactory voisinageFactory = new VoisinageFactory();
 
 	private final VoisinageFactoryRecuit voisinageFactory = new VoisinageFactoryRecuit();
 
