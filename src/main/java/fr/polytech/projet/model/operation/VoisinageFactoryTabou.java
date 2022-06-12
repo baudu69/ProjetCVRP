@@ -3,7 +3,6 @@ package fr.polytech.projet.model.operation;
 import fr.polytech.projet.model.Chemin;
 import fr.polytech.projet.model.Point;
 import fr.polytech.projet.model.Solution;
-import fr.polytech.projet.model.settings.Settings;
 import fr.polytech.projet.model.settings.SettingsTabou;
 
 import java.util.HashSet;
@@ -11,18 +10,22 @@ import java.util.Set;
 
 public class VoisinageFactoryTabou {
 
-	private final SettingsTabou.SettingsVoisinage settings;
+	private SettingsTabou.SettingsVoisinage settings;
 
 	public VoisinageFactoryTabou() {
-		settings = Settings.getSettings().tabou().operations_voisinage();
+		//settings = Settings.getSettings().tabou().operations_voisinage();
 	}
 
 	public Set<Operation> getFullVoisinage(Solution solution) {
 		final Set<Operation> ret = new HashSet<>();
-		if (settings.swap()) ret.addAll(getFullVoisinageSwap(solution));
-		if (settings.two_opt()) ret.addAll(getFullVoisinageTwoOpt(solution));
-		if (settings.transfert_client()) ret.addAll(getFullVoisinageTransfertClient(solution));
-		if (settings.swap_path()) ret.addAll(getFullVoisinageSwapPath(solution));
+//		if (settings.swap()) ret.addAll(getFullVoisinageSwap(solution));
+//		if (settings.two_opt()) ret.addAll(getFullVoisinageTwoOpt(solution));
+//		if (settings.transfert_client()) ret.addAll(getFullVoisinageTransfertClient(solution));
+//		if (settings.swap_path()) ret.addAll(getFullVoisinageSwapPath(solution));
+		ret.addAll(getFullVoisinageSwap(solution));
+		ret.addAll(getFullVoisinageTwoOpt(solution));
+		ret.addAll(getFullVoisinageTransfertClient(solution));
+		ret.addAll(getFullVoisinageSwapPath(solution));
 		return ret;
 	}
 

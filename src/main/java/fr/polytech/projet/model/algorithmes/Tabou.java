@@ -3,8 +3,6 @@ package fr.polytech.projet.model.algorithmes;
 import fr.polytech.projet.model.Solution;
 import fr.polytech.projet.model.operation.Operation;
 import fr.polytech.projet.model.operation.VoisinageFactoryTabou;
-import fr.polytech.projet.model.settings.Settings;
-import fr.polytech.projet.model.settings.SettingsTabou;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -13,10 +11,11 @@ import java.util.Set;
 public class Tabou implements Algorithme {
 
 	private final Solution solution;
-	private final SettingsTabou settings;
+//	private final SettingsTabou settings;
 	private final Deque<Operation> listeTabou;
 	private final VoisinageFactoryTabou voisinageFactory = new VoisinageFactoryTabou();
 	private Solution bestSolution = null;
+	private final int taille_liste_tabou = 1000;
 
 	@Override
 	public String getName() {
@@ -25,9 +24,9 @@ public class Tabou implements Algorithme {
 
 	public Tabou(Solution solution) {
 		this.solution = solution;
-		this.settings = Settings.getSettings().tabou();
-		System.out.println(settings.toString());
-		this.listeTabou = new ArrayDeque<>(settings.taille_liste_tabou());
+		//this.settings = Settings.getSettings().tabou();
+//		System.out.println(settings.toString());
+		this.listeTabou = new ArrayDeque<>(taille_liste_tabou);
 	}
 
 	@Override
@@ -60,7 +59,7 @@ public class Tabou implements Algorithme {
 //			System.out.println("+LISTE: " + bestOp.inverse());
 			listeTabou.addLast(bestOp);
 			listeTabou.addLast(bestOp.inverse());
-			while (listeTabou.size() > settings.taille_liste_tabou()) listeTabou.pop();
+			while (listeTabou.size() > taille_liste_tabou) listeTabou.pop();
 		} else if (bestSolution == null || solution.longueur() < bestSolution.longueur()) {
 			bestSolution = solution.copy();
 		}
