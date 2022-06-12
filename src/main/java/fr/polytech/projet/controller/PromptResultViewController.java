@@ -207,13 +207,14 @@ public class PromptResultViewController {
 			stopRequested.set(false);
 			while (!stopRequested.get()) {
 				try {
-					Thread.sleep(attentemili, attenteNano);
+					//Thread.sleep(attentemili, attenteNano);
 					synchronized (this) {
 						algorithme.update();
 						attentemili = (long) tempsAttente;
 						attenteNano = (int) (tempsAttente - attentemili);
 					}
-				} catch (Exception ignored) {
+				} catch (Exception e) {
+					throw new RuntimeException(e);
 				}
 				Platform.runLater(() -> {
 					synchronized (this) {
@@ -247,6 +248,7 @@ public class PromptResultViewController {
 
 	@FXML
 	protected void btnRetourOnClick() throws IOException {
+		stopRequested.set(true);
 		this.promptHelloApplication.start((Stage) btnRetour.getScene().getWindow());
 	}
 
