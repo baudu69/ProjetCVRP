@@ -107,7 +107,25 @@ public class VoisinageFactoryTabou {
 	}
 
 	private Set<SwapPath> getFullVoisinageSwapPath(Solution solution) {
-		return Collections.emptySet(); // TODO
+		final Set<SwapPath> ret = new HashSet<>();
+
+		for (final Chemin c1 : solution) {
+			for (final Chemin c2 : solution) {
+				if (c1 != c2) {
+					for (final Point p1 : c1) {
+						if (!p1.isDepot()) {
+							for (final Point p2 : c2) {
+								if (!p2.isDepot()) {
+									ret.add(new SwapPath(p1, p2));
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return ret;
 	}
 
 

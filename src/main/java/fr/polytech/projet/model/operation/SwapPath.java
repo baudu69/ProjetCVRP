@@ -6,6 +6,8 @@ import fr.polytech.projet.model.Solution;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 public class SwapPath implements Operation {
 
@@ -58,4 +60,15 @@ public class SwapPath implements Operation {
 		return valid;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		SwapPath that = (SwapPath) o;
+		return Objects.equals(Set.of(this.a, this.b), Set.of(that.a, that.b));
+	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(Set.of(a, b));
+	}
 }
