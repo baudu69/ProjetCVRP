@@ -18,8 +18,6 @@ public class PrompGraphController {
 			Double v = value.get(i);
 			series.getData().add(new XYChart.Data<>(String.valueOf(i), v));
 		}
-//		series.getData().add(new XYChart.Data<>(String.valueOf("test"), 3.5));
 		lc_result.getData().add(series);
-
 	}
 }

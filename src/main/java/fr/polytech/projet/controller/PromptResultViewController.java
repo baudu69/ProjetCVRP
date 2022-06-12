@@ -59,6 +59,8 @@ public class PromptResultViewController {
 
 	private final List<Double> solutionFitnessHistory = new ArrayList<>();
 
+	private Stage newWindow;
+
 	private final List<Class<?>> algos = List.of(Tabou.class, Recuit.class);
 	private String fichier;
 	private Solution solution;
@@ -243,6 +245,9 @@ public class PromptResultViewController {
 	@FXML
 	protected void btnRetourOnClick() throws IOException {
 		stopRequested.set(true);
+		if (this.newWindow != null) {
+			this.newWindow.close();
+		}
 		this.promptHelloApplication.start((Stage) btnRetour.getScene().getWindow());
 	}
 
@@ -283,10 +288,9 @@ public class PromptResultViewController {
 		}
 		PrompGraphController controller = fxmlLoader.getController();
 		controller.setValue(new ArrayList<>(this.solutionFitnessHistory));
-		Stage newWindow = new Stage();
+		newWindow = new Stage();
 		newWindow.setTitle("Parametres");
 		newWindow.setScene(scene);
 		newWindow.show();
-
 	}
 }

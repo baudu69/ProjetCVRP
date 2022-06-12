@@ -1,6 +1,6 @@
 {
 	"tabou": {
-		"taille_liste_tabou": 1000,
+		"taille_liste_tabou": 10,
 		"operations_voisinage": {
 			"swap": true,
 			"two_opt": true,
