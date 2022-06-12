@@ -14,7 +14,8 @@ public class StatApplication {
 	public static void main(String[] args) {
 		List<String> fichiersAFaire = List.of("A3205.txt", "A3405.txt", "A4406.txt", "A6208.txt", "A6208.txt", "A8010.txt", "c101.txt", "c201.txt", "r101.txt");
 //		List<String> fichiersAFaire = List.of("A3205.txt", "A3405.txt");
-		int nbrTest = 1;
+//		List<String> fichiersAFaire = List.of("c101.txt", "r101.txt");
+		int nbrTest = 5;
 		int nbrIteration = 3000;
 		Lecture lecture = new Lecture();
 		List<String> fichiers = lecture.listerLesFichiersStr();
@@ -31,7 +32,7 @@ public class StatApplication {
 							for (int j = 0; j < nbrIteration; j++) {
 								tabou.update();
 							}
-							moyenne.add(tabou.getSolution().longueur());
+							moyenne.add(tabou.getBestSolution().longueur());
 							nbThread.getAndDecrement();
 						}));
 					}
@@ -43,7 +44,7 @@ public class StatApplication {
 							e.printStackTrace();
 						}
 					}
-					System.out.printf("Fichier : %s, Distance mini : %s \n%n", fichier, moyenne.stream().mapToDouble(Double::doubleValue).summaryStatistics().getAverage());
+					System.out.printf("Fichier : %s, Distance mini : %.0f \n%n", fichier, moyenne.stream().mapToDouble(Double::doubleValue).summaryStatistics().getAverage());
 
 				});
 

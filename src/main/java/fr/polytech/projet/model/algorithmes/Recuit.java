@@ -19,15 +19,23 @@ public class Recuit implements Algorithme {
 
 	private final Random random = new Random();
 
-	private final VoisinageFactoryRecuit voisinageFactory = new VoisinageFactoryRecuit();
+	private final VoisinageFactoryRecuit voisinageFactory;
 
 	public Recuit(Solution solution) {
 		this.solution = solution;
 
 		this.settings = Settings.getSettings().recuit();
+		voisinageFactory = new VoisinageFactoryRecuit(settings.poids_voisinage());
 		System.out.println(settings.toString());
 
 		this.t = settings.t0();
+	}
+	
+	public Recuit(Solution solution, SettingsRecuit settings) {
+		this.solution = solution;
+		this.settings = settings;
+		this.t = settings.t0();
+		this.voisinageFactory = new VoisinageFactoryRecuit(settings.poids_voisinage());
 	}
 
 	@Override

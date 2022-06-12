@@ -11,6 +11,14 @@ public class SettingsRecuit {
 	SettingsRecuit() {
 	}
 
+	public SettingsRecuit(double t0, double mu, int n1, int n2, SettingsVoisinage poids_voisinage) {
+		this.t0 = t0;
+		this.mu = mu;
+		this.n1 = n1;
+		this.n2 = n2;
+		this.poids_voisinage = poids_voisinage;
+	}
+
 	public double t0() {
 		return t0;
 	}
@@ -41,6 +49,13 @@ public class SettingsRecuit {
 		private Double sum = null;
 
 		SettingsVoisinage() {
+		}
+
+		public SettingsVoisinage(double swap, double two_opt, double transfert_client, double swap_path) {
+			this.swap = swap;
+			this.two_opt = two_opt;
+			this.transfert_client = transfert_client;
+			this.swap_path = swap_path;
 		}
 
 		public double swap() {

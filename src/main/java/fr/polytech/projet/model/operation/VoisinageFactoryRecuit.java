@@ -3,18 +3,17 @@ package fr.polytech.projet.model.operation;
 import java.util.Map;
 import java.util.Random;
 
-import fr.polytech.projet.model.Chemin;
 import fr.polytech.projet.model.Point;
 import fr.polytech.projet.model.Solution;
-import fr.polytech.projet.model.settings.Settings;
-import fr.polytech.projet.model.settings.SettingsRecuit;
+
+import static fr.polytech.projet.model.settings.SettingsRecuit.SettingsVoisinage;
 
 public class VoisinageFactoryRecuit {
 
-	private final SettingsRecuit.SettingsVoisinage settings;
+	private final SettingsVoisinage settings;
 
-	public VoisinageFactoryRecuit() {
-		settings = Settings.getSettings().recuit().poids_voisinage();
+	public VoisinageFactoryRecuit(SettingsVoisinage settings) {
+		this.settings = settings;
 	}
 
 	private final Random random = new Random();
