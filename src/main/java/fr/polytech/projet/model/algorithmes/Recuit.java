@@ -2,37 +2,25 @@ package fr.polytech.projet.model.algorithmes;
 
 import fr.polytech.projet.model.Solution;
 import fr.polytech.projet.model.operation.Operation;
+import fr.polytech.projet.model.operation.OperationConstantes;
 import fr.polytech.projet.model.operation.VoisinageFactory;
-import fr.polytech.projet.model.parametres.ListeParametre;
-import fr.polytech.projet.model.parametres.ParametreDouble;
-import fr.polytech.projet.model.parametres.ParametreInt;
-import fr.polytech.projet.model.parametres.ParametreListeStr;
 
-import java.util.List;
 import java.util.Random;
 
 public class Recuit implements Algorithme {
 
 	private final Solution solution;
-	private double t;
+	private double t = 0;
 	private int n2_i = 0;
 	private int n1_i = 0;
 
 	private final Random random = new Random();
 	private final VoisinageFactory voisinageFactory = new VoisinageFactory();
 
-	ListeParametre parametres = ListeParametre.of(
-			new ParametreDouble("MU", 0.0, 0.9999, 0.99),
-			new ParametreDouble("T0", 1.0, 1000.0, 900.0),
-			new ParametreInt("n2", 1.0, 10.0, 5.0),
-			new ParametreListeStr("testCB", List.of("test1", "test2"), "test1")
-	);
 
 	public Recuit(Solution solution) {
 
 		this.solution = solution;
-
-		this.t = ((ParametreDouble) parametres.find("MU")).getValue();
 	}
 
 	@Override
@@ -59,9 +47,9 @@ public class Recuit implements Algorithme {
 		}
 
 		n2_i++;
-		if (n2_i == ((ParametreInt) parametres.find("n2")).getValue()) {
+		if (n2_i == OperationConstantes.N_2) {
 			n2_i = 0;
-			t *= ((ParametreDouble) this.parametres.find("MU")).getValue();
+			t *= OperationConstantes.MU;
 			n1_i++;
 		}
 	}
@@ -69,11 +57,6 @@ public class Recuit implements Algorithme {
 	@Override
 	public Solution getSolution() {
 		return solution;
-	}
-
-	@Override
-	public ListeParametre getParametres() {
-		return parametres;
 	}
 
 	@Override
@@ -85,12 +68,12 @@ public class Recuit implements Algorithme {
 	@Override
 	public String toString() {
 		return "Recuit{" +
-				"parametreDoubles = " + parametres +
-				"}";
-	}
-
-	@Override
-	public void applyParametre() {
-
+				"solution=" + solution +
+				", t=" + t +
+				", n2_i=" + n2_i +
+				", n1_i=" + n1_i +
+				", random=" + random +
+				", voisinageFactory=" + voisinageFactory +
+				'}';
 	}
 }

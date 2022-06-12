@@ -1,10 +1,8 @@
 package fr.polytech.projet.model.algorithmes;
 
 import fr.polytech.projet.model.Solution;
-import fr.polytech.projet.model.parametres.ListeParametre;
-import fr.polytech.projet.model.parametres.ParametreImpl;
 
-public interface Algorithme extends ParametreImpl {
+public interface Algorithme {
 
 	/**
 	 * @return The name of the algorithm.
@@ -24,7 +22,6 @@ public interface Algorithme extends ParametreImpl {
 	/**
 	 * @return liste des parametreDoubles d'un algorithme
 	 */
-	ListeParametre getParametres();
 
 	/**
 	 * Print best solution if exist

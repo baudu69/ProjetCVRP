@@ -12,9 +12,7 @@ import fr.polytech.projet.outils.OutilsGraphe;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -60,8 +58,6 @@ public class PromptResultViewController {
 	@FXML
 	protected Button btnValiderAlgo;
 
-	private PromptDetailsController detailsController;
-
 	public void setFichier(String fichier) {
 		this.fichier = fichier;
 		this.lblJeuChoisi.setText(String.format("Jeu choisi : %s", this.fichier));
@@ -80,34 +76,6 @@ public class PromptResultViewController {
 		this.btnPasAPas.setDisable(true);
 	}
 
-	private void initSecondView() {
-		FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("scene/prompt-details-view.fxml"));
-		Scene scene = null;
-		try {
-			scene = new Scene(fxmlLoader.load(), 800, 800);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		this.detailsController = fxmlLoader.getController();
-		detailsController.init();
-		Stage newWindow = new Stage();
-		newWindow.setTitle("Parametres");
-		newWindow.setScene(scene);
-		newWindow.show();
-	}
-
-	private void initParamView() throws IOException {
-		FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("scene/display-param-view.fxml"));
-		Scene scene = new Scene(fxmlLoader.load(), 800, 800);
-		DisplayParamController controller = fxmlLoader.getController();
-		controller.setAlgorithme(algorithme);
-		controller.init();
-		Stage newWindow = new Stage();
-		newWindow.setTitle("Parametres");
-		newWindow.setScene(scene);
-		newWindow.show();
-	}
-
 	/**
 	 * Charge la liste des points, les dessine puis genère les chemins initiaux
 	 */
@@ -121,7 +89,6 @@ public class PromptResultViewController {
 		initComboBoxAlgo();
 		initBtn();
 		chargerPoints();
-		//initSecondView();
 		this.tempsAttente = this.sldSpeed.getValue();
 		this.sldSpeed.valueProperty().addListener((observable, oldValue, newValue) -> sldSpeedOnDrag());
 	}
@@ -207,7 +174,7 @@ public class PromptResultViewController {
 			stopRequested.set(false);
 			while (!stopRequested.get()) {
 				try {
-					//Thread.sleep(attentemili, attenteNano);
+					Thread.sleep(attentemili, attenteNano);
 					synchronized (this) {
 						algorithme.update();
 						attentemili = (long) tempsAttente;
@@ -221,7 +188,6 @@ public class PromptResultViewController {
 						group.getChildren().clear();
 						lblDistance.setText(String.format("Longueur : %.3f", solution.longueur()));
 						dessinerSolution(solution);
-						//this.detailsController.addDistance(solution.longueur());
 					}
 				});
 			}
@@ -261,10 +227,6 @@ public class PromptResultViewController {
 			} else if (Tabou.class.equals(classeAlgoChoisi)) {
 				this.algorithme = new Tabou(solution);
 			}
-		}
-		try {
-			initParamView();
-		} catch (IOException ignored) {
 		}
 	}
 }

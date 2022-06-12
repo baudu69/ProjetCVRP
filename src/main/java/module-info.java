@@ -13,6 +13,5 @@ module fr.polytech.projet {
 
 	exports fr.polytech.projet.model;
 	exports fr.polytech.projet.model.operation;
-	exports fr.polytech.projet.model.parametres;
 	exports fr.polytech.projet.model.algorithmes;
 }

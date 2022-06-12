@@ -1,11 +1,11 @@
 package fr.polytech.projet.model.operation;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import fr.polytech.projet.model.Chemin;
 import fr.polytech.projet.model.Point;
 import fr.polytech.projet.model.Solution;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SwapPath implements Operation {
 
@@ -57,4 +57,5 @@ public class SwapPath implements Operation {
 		inverse().apply(solution);
 		return valid;
 	}
+
 }

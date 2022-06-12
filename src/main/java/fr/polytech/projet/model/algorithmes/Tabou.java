@@ -4,8 +4,7 @@ import fr.polytech.projet.model.Solution;
 import fr.polytech.projet.model.algorithmes.voisinage.Voisinage;
 import fr.polytech.projet.model.algorithmes.voisinage.VoisinageSwapProche;
 import fr.polytech.projet.model.operation.Operation;
-import fr.polytech.projet.model.parametres.ListeParametre;
-import fr.polytech.projet.model.parametres.ParametreInt;
+import fr.polytech.projet.model.operation.OperationConstantes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,13 +12,11 @@ import java.util.List;
 
 public class Tabou implements Algorithme {
 
-	private final Solution solution;
+	private Solution solution;
 	private final List<Operation> opmMoins1 = new ArrayList<>();
-	private final ListeParametre parametres;
 	private final Voisinage voisinage;
 	private double fitnessMini = Double.POSITIVE_INFINITY;
-	private List<Operation> opGetBackBestSolution = new ArrayList<>();
-	private int tailleListe;
+	private Solution bestSolution;
 
 	@Override
 	public String getName() {
@@ -28,10 +25,6 @@ public class Tabou implements Algorithme {
 
 	public Tabou(Solution solution) {
 		this.solution = solution;
-		parametres = ListeParametre.of(
-				new ParametreInt("Taille du voisinage", 1.0, 50.0, 5.0),
-				new ParametreInt("Taille de la liste", 1.0, 50.0, 15.0));
-		parametres.forEach(parametre -> parametre.ajouterParametreImpl(this));
 		voisinage = new VoisinageSwapProche();
 	}
 
@@ -60,29 +53,23 @@ public class Tabou implements Algorithme {
 			double deltaF = fitnessMiniXPlus1 - solution.longueur();
 			if (deltaF > 0) {
 				ajoutInverseOperationToListMMoins1(operationXPlus1);
-				opGetBackBestSolution.add(operationXPlus1.inverse());
 			}
 			if (fitnessMiniXPlus1 < fitnessMini) {
 				fitnessMini = fitnessMiniXPlus1;
-				opGetBackBestSolution = new ArrayList<>();
+				bestSolution = (Solution) solution.clone();
 			}
 			operationXPlus1.apply(solution);
 		}
 	}
 
 	@Override
-	public ListeParametre getParametres() {
-		return parametres;
-	}
-
-	@Override
 	public Solution getSolution() {
-		return solution;
+		return bestSolution;
 	}
 
 	@Override
 	public Solution stop() {
-		applyListeOperationToSolution();
+		this.solution = bestSolution;
 		return solution;
 	}
 
@@ -98,9 +85,8 @@ public class Tabou implements Algorithme {
 	 * @param operation Operation dont l'inverse est a ajouter
 	 */
 	private void ajoutInverseOperationToListMMoins1(Operation operation) {
-		//While au lieu de if au cas ou la taille de la liste est change
-		while (this.opmMoins1.size() >= tailleListe) {
-			this.parametres.remove(0);
+		if (opmMoins1.size() == OperationConstantes.TAILLE_LISTE_TABOU) {
+			opmMoins1.remove(0);
 		}
 		this.opmMoins1.add(operation.inverse());
 	}
@@ -114,20 +100,5 @@ public class Tabou implements Algorithme {
 		double fitnessOperation = solution.longueur();
 		operation.inverse().apply(solution);
 		return fitnessOperation;
-	}
-
-	/**
-	 * Applique la liste des operations inverse pour recuperer la solution minimale
-	 */
-	private void applyListeOperationToSolution() {
-		for (int i = opGetBackBestSolution.size() - 1; i >= 0; i--) {
-			opGetBackBestSolution.get(i).apply(solution);
-			opGetBackBestSolution.remove(i);
-		}
-	}
-
-	@Override
-	public void applyParametre() {
-		this.tailleListe = ((ParametreInt) parametres.find("Taille de la liste")).getValue().intValue();
 	}
 }
