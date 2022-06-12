@@ -1,5 +1,9 @@
 package fr.polytech.projet.controller;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import fr.polytech.projet.HelloApplication;
 import fr.polytech.projet.model.Chemin;
 import fr.polytech.projet.model.Point;
@@ -7,6 +11,7 @@ import fr.polytech.projet.model.Solution;
 import fr.polytech.projet.model.algorithmes.Algorithme;
 import fr.polytech.projet.model.algorithmes.Recuit;
 import fr.polytech.projet.model.algorithmes.Tabou;
+import fr.polytech.projet.model.settings.Settings;
 import fr.polytech.projet.outils.Lecture;
 import fr.polytech.projet.outils.OutilsGraphe;
 import javafx.application.Platform;
@@ -21,10 +26,6 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PromptResultViewController {
 
@@ -77,11 +78,12 @@ public class PromptResultViewController {
 	}
 
 	/**
-	 * Charge la liste des points, les dessine puis genère les chemins initiaux
+	 * Charge la liste des points, les dessine puis génère les chemins initiaux
 	 */
 	private void chargerPoints() {
 		Lecture lecture = new Lecture();
 		solution = OutilsGraphe.generateRandomSolution(lecture.lireFichier2(this.fichier));
+		solution.forEach(System.out::println);
 		dessinerSolution(solution);
 	}
 
@@ -139,6 +141,11 @@ public class PromptResultViewController {
 	private void dessinerSolution(Solution solution) {
 		solution.forEach(this::dessinerChemin);
 		solution.forEach(chemin1 -> chemin1.forEach(this::dessinerPoint));
+
+		System.out.println("Capacités :");
+		for (int i = 0, size = solution.size(); i < size; ++i) {
+			System.out.println(i + " : " + solution.get(i).quantity());
+		}
 	}
 
 	@FXML
@@ -146,7 +153,12 @@ public class PromptResultViewController {
 		this.btnValiderAlgo.setDisable(true);
 		this.btnLancer.setDisable(false);
 		this.btnPasAPas.setDisable(false);
-		this.initAlgo();
+		try {
+			Settings.reloadSettings();
+			this.initAlgo();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@FXML
@@ -155,7 +167,11 @@ public class PromptResultViewController {
 
 		group.getChildren().clear();
 
-		algorithme.update();
+		try {
+			algorithme.update();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		lblDistance.setText(String.format("Longueur : %.3f", solution.longueur()));
 
@@ -176,12 +192,13 @@ public class PromptResultViewController {
 				try {
 					Thread.sleep(attentemili, attenteNano);
 					synchronized (this) {
-						algorithme.update();
+						if (!algorithme.update()) stopRequested.set(true);
 						attentemili = (long) tempsAttente;
 						attenteNano = (int) (tempsAttente - attentemili);
 					}
 				} catch (Exception e) {
-					throw new RuntimeException(e);
+					e.printStackTrace();
+					stopRequested.set(true);
 				}
 				Platform.runLater(() -> {
 					synchronized (this) {
