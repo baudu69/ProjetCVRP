@@ -1,16 +1,8 @@
 package fr.polytech.projet.model.algorithmes;
 
-import java.util.List;
-import java.util.Random;
-
 import fr.polytech.projet.model.Solution;
 import fr.polytech.projet.model.operation.Operation;
-import fr.polytech.projet.model.operation.OperationConstantes;
 import fr.polytech.projet.model.operation.VoisinageFactory;
-import fr.polytech.projet.model.parametres.ListeParametre;
-import fr.polytech.projet.model.parametres.ParametreDouble;
-import fr.polytech.projet.model.parametres.ParametreInt;
-import fr.polytech.projet.model.parametres.ParametreListeStr;
 import fr.polytech.projet.model.settings.Settings;
 import fr.polytech.projet.model.settings.SettingsRecuit;
 
@@ -19,7 +11,6 @@ import java.util.Random;
 public class Recuit implements Algorithme {
 
 	private final Solution solution;
-	private double t = 0;
 	private final SettingsRecuit settings;
 	private double t;
 	private int n2_i = 0;
@@ -94,12 +85,7 @@ public class Recuit implements Algorithme {
 	@Override
 	public String toString() {
 		return "Recuit{" +
-				"solution=" + solution +
-				", t=" + t +
-				", n2_i=" + n2_i +
-				", n1_i=" + n1_i +
-				", random=" + random +
-				", voisinageFactory=" + voisinageFactory +
+				", settings=" + settings +
 				'}';
 	}
 }
