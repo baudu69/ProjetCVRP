@@ -34,15 +34,16 @@ public class VoisinageFactoryRecuit {
 		}
 		rand_type -= settings.two_opt();
 		if (rand_type < 0) {
-//			final Chemin chemin = getRandomCheminNonVide(solution);
-//			final int chemin$size = chemin.size() - 2;
-//
-//			return new TwoOpt(
-//					chemin.get(random.nextInt(chemin$size) + 1),
-//					chemin.get(random.nextInt(chemin$size) + 1)
-//			);
-			// TODO: use new 2-opt version
-			return Operation.NOP;
+			final int chemin = getRandomCheminNonVide(solution);
+			final int chemin$size = solution.get(chemin).size() - 1;
+
+			final int ia = random.nextInt(chemin$size);
+			int ib;
+			do {
+				ib = random.nextInt(chemin$size);
+			} while (ib == ia);
+
+			return new TwoOpt(chemin, Math.min(ia, ib), Math.max(ia, ib));
 		}
 		rand_type -= settings.swap_path();
 		if (rand_type < 0) {
@@ -53,26 +54,24 @@ public class VoisinageFactoryRecuit {
 		}
 		rand_type -= settings.transfert_client();
 		if (rand_type < 0) {
-//			final Chemin chemin1 = getRandomCheminNonVide(solution);
-//			final Chemin chemin2 = getRandomCheminNonVide(solution);
-//
-//			return new TransfertClient(
-//					chemin1, random.nextInt(1, chemin1.size() - 1),
-//					chemin2, random.nextInt(1, chemin2.size())
-//			);
-			// TODO: use new TFRC version
-			return Operation.NOP;
+			final int chemin1 = getRandomCheminNonVide(solution);
+			final int chemin2 = getRandomCheminNonVide(solution);
+
+			return new TransfertClient(
+					chemin1, random.nextInt(1, solution.get(chemin1).size() - 1),
+					chemin2, random.nextInt(1, solution.get(chemin2).size() - 1)
+			);
 		}
 
 		return Operation.NOP;
 	}
 
-	private Chemin getRandomCheminNonVide(Solution solution) {
-		Chemin c;
+	private int getRandomCheminNonVide(Solution solution) {
+		int c;
 		final int size = solution.size();
 		do {
-			c = solution.get(random.nextInt(size));
-		} while (c.size() == 2);
+			c = random.nextInt(size);
+		} while (solution.get(c).size() == 2);
 		return c;
 	}
 
