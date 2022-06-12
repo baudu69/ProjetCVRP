@@ -213,7 +213,6 @@ public class PromptResultViewController {
 						group.getChildren().clear();
 						lblDistance.setText(String.format("Longueur : %.3f", solution.longueur()));
 						dessinerSolution(solution);
-						afficherHistorique();
 					}
 				});
 			}
@@ -223,6 +222,7 @@ public class PromptResultViewController {
 					group.getChildren().clear();
 					lblDistance.setText(String.format("Longueur : %.3f", algorithme.getBestSolution().longueur()));
 					dessinerSolution(algorithme.getBestSolution());
+					afficherHistorique();
 				}
 			});
 		});
